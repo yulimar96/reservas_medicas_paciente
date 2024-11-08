@@ -1,0 +1,50 @@
+
+.primary-md {
+    background: linear-gradient(60deg, #ab47bc, #8e24aa) !important;
+    color: azure !important;
+}
+
+.info-md {
+    background: linear-gradient(60deg, #26c6da, #00acc1) !important;
+    color: azure !important;
+}
+.info-md-sd {
+    background: linear-gradient(60deg, #edeeee, #55b5c2) !important;
+    color: azure !important;
+}
+.c-info-md{
+    color: #8ACCDE !important;
+}
+/* .nav a:hover {
+    color: #007BFF !important;
+    text-decoration: underline !important;
+} */
+.nav a {
+    color:white !important; /* Color del texto normal */
+    text-decoration: none  !important; /* Sin subrayado */
+    cursor: pointer  !important; /* Cambia el cursor a un puntero */
+    padding: 10px  !important; /* Espaciado interno */
+    transition: color 0.15s ease  !important; /* Transición suave para el color */
+}
+
+.nav a:hover {
+    color: #2aaabe  !important; /* Color del texto al pasar el mouse */
+    text-shadow: #000507 !important; /* Subrayado al pasar el mouse */
+    background: rgba(42, 170, 190, 0.2) !important;
+}
+.nav-pills .nav-link{
+    color:white !important;
+}
+.letra-th{
+    font-size: 14px !important;
+    font-weight: 100  !important;
+}
+/* .card-icon{
+    padding-top: 10px !important;
+    padding-bottom: 2px !important;
+    padding-right: 2px!important;
+    background:#8ACCDE !important;
+}
+.card-icon i{
+    color: white !important;
+} */
