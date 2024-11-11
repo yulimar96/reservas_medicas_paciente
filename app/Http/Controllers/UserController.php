@@ -11,8 +11,8 @@ class UserController extends Controller
      */
     public function index()
     {
-        $users = User::all();
-       return view('pages.admin.user.index', compact('users'));
+        $users = User::where('active', '=', 1)->get();
+       return view('pages.user.index', compact('users'));
     }
 
     /**
@@ -20,7 +20,7 @@ class UserController extends Controller
      */
     public function create()
     {
-        return view('pages.admin.user.stored');
+        return view('pages.user.stored');
     }
 
     /**
@@ -31,15 +31,15 @@ class UserController extends Controller
         try {
             request()->validate([
                 'name' => 'required|string|max:255|regex:/^[a-zA-Z]+$/',
-                'last_name' => 'required|string|max:255|regex:/^[a-zA-Z]+$/',
+                'surname1' => 'required|string|max:255|regex:/^[a-zA-Z]+$/',
                 'ci' => 'required|string|max:20|regex:/^[0-9]+$/',
                 'email' => 'required|email|max:255|unique:users,email',
                 'password' => 'required',
             ], [
                 'name.required' => 'El nombre es obligatorio.',
                 'name.regex' => 'El nombre solo puede contener letras.',
-                'last_name.required' => 'El apellido es obligatorio.',
-                'last_name.regex' => 'El apellido solo puede contener letras.',
+                'surname1.required' => 'El apellido es obligatorio.',
+                'surname1.regex' => 'El apellido solo puede contener letras.',
                 'ci.required' => 'El CI es obligatorio.',
                 'ci.regex' => 'El CI solo puede contener números.',
                 'email.required' => 'El correo electrónico es obligatorio.',
@@ -51,7 +51,7 @@ class UserController extends Controller
             // Crear y guardar el nuevo usuario
             User::create([
                 'name' => $request->name,
-                'last_name' => $request->last_name,
+                'surname1' => $request->surname1,
                 'ci' => $request->ci,
                 'email' => $request->email,
                 'password' => bcrypt($request->password),
@@ -82,7 +82,8 @@ class UserController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $user = User::find($id);
+    return response()->json($user);
     }
 
     /**
@@ -90,14 +91,70 @@ class UserController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
-    }
+        try {
+            // Validar los datos de entrada
+            request()->validate([
+                'name' => 'required|string|max:255|regex:/^[a-zA-Z]+$/',
+                'surname1' => 'required|string|max:255|regex:/^[a-zA-Z]+$/',
+                'ci' => 'required|string|max:20|regex:/^[0-9]+$/',
+                'email' => 'required|email|max:255|unique:users,email,' . $id, // Permitir el mismo correo electrónico
+                'password' => 'nullable|min:6', // La contraseña es opcional en la actualización
+            ], [
+                'name.required' => 'El nombre es obligatorio.',
+                'name.regex' => 'El nombre solo puede contener letras.',
+                'surname1.required' => 'El apellido es obligatorio.',
+                'surname1.regex' => 'El apellido solo puede contener letras.',
+                'ci.required' => 'El CI es obligatorio.',
+                'ci.regex' => 'El CI solo puede contener números.',
+                'email.required' => 'El correo electrónico es obligatorio.',
+                'email.email' => 'El formato del correo electrónico es inválido.',
+                'email.unique' => 'El correo electrónico ya está en uso.',
+                'password.min' => 'La contraseña debe tener al menos 6 caracteres.',
+            ]);
 
+            // Buscar el usuario existente
+            $user = User::findOrFail($id);
+
+            // Actualizar los campos del usuario
+            $user->name = $request->name;
+            $user->surname1 = $request->surname1;
+            $user->ci = $request->ci;
+            $user->email = $request->email;
+            // Si se proporciona una nueva contraseña, actualizarla
+            if ($request->filled('password')) {
+                $user->password = bcrypt($request->password);
+            }
+
+            // Guardar los cambios
+            $user->save();
+
+            // Redirigir con un mensaje de éxito
+            return redirect()->route('user.index')->with('message', 'Los datos se han actualizado correctamente.')
+                ->with('icono', 'success');
+        } catch (\Throwable $th) {
+            // Manejo de errores
+            return redirect()->route('user.index')->with('message', 'Verifique los datos e intente nuevamente. ' . $th->getMessage())
+                ->with('icono', 'error');
+        }
+    }
     /**
      * Remove the specified resource from storage.
      */
     public function destroy(string $id)
     {
-        //
+        // Encuentra al usuario por su ID
+        $user = User::find($id);
+
+        // Verifica si el usuario existe
+        if (!$user) {
+            return response()->json(['message' => 'Usuario no encontrado.'], 404);
+        }
+
+        // Deshabilitar al usuario
+        $user->active = false;
+        $user->save();
+
+        return redirect()->route('user.index')->with('message', 'El usuario ha sido deshabilitado correctamente.')->with('icono', 'success');
+
     }
 }

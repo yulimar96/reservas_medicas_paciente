@@ -1,5 +1,5 @@
 
-<div class="sidebar">
+<div class="sidebar" >
     <style>
         .main-sidebar {
             position: relative; /* Necesario para el posicionamiento del pseudo-elemento */
@@ -52,24 +52,19 @@
         <img src="../dist/img/user2-160x160.jpg" class="img-circle elevation-2" alt="User Image">
       </div>
       <div class="info">
-  <a class="d-block text-white"> {{ Auth::user()->name }} {{ Auth::user()->last_name }}</a>
+        <a class="d-block text-white"> {{ Auth::user()->name }} {{ Auth::user()->surname1 }}</a>
       </div>
     </div>
-
     <!-- SidebarSearch Form -->
     <div class="form-inline">
-
     </div>
-
     <!-- Sidebar Menu -->
-    <nav class="mt-2">
+    <nav class="mt-2" >
       <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
-        <!-- Add icons to the links using the .nav-icon class
-             with font-awesome or any other icon font library -->
              <li class="nav-item">
                 <a href="{{route('user.index')}}" class="nav-link">
                     <i class="nav-icon fas fa-users"></i>
-                    <p>User</p>
+                    <p>Gestión de usuarios</p>
                 </a>
             </li>
             <li class="nav-item">

@@ -5,7 +5,7 @@
 }
 
 .info-md {
-    background: linear-gradient(60deg, #26c6da, #00acc1) !important;
+    background: linear-gradient(74deg, #13d3ebe3, #31abbbfa) !important;
     color: azure !important;
 }
 .info-md-sd {
@@ -13,7 +13,18 @@
     color: azure !important;
 }
 .c-info-md{
+    color: #0f738f !important;
+}
+.btn.c-info-md:hover {
     color: #8ACCDE !important;
+}
+.btn-danger{
+    background: linear-gradient(74deg, #f32912, #ef9090fa) !important;
+    color: azure !important;
+}
+.btn-limpiar{
+    background: linear-gradient(247deg, #00ffff, #16a379) !important;
+    color: azure !important;
 }
 /* .nav a:hover {
     color: #007BFF !important;
@@ -39,6 +50,9 @@
     font-size: 14px !important;
     font-weight: 100  !important;
 }
+.btn-danger{
+    background-color: darkred !important;
+}
 /* .card-icon{
     padding-top: 10px !important;
     padding-bottom: 2px !important;
@@ -48,3 +62,28 @@
 .card-icon i{
     color: white !important;
 } */
+.card-header button{
+    background: linear-gradient(74deg, #234d53e3, #bcdee2fa) !important;
+    color: white !important;
+}
+.card-header button:hover{
+    background: linear-gradient(74deg, #043541e3, #7cdbe7fa) !important;
+    color: white !important;
+}
+.form .btn-danger {
+    background: red !important; /* Cambia el fondo a rojo */
+    border-color: red !important; /* Cambia el borde a rojo también */
+}
+
+.form .btn-danger:hover {
+    background: darkred !important; /* Cambia el fondo al pasar el mouse */
+    border-color: darkred !important; /* Cambia el borde al pasar el mouse */
+}
+.border-radius{
+    border-radius: 4rem!important;
+}
+.modal-content {
+    box-shadow: 0 .5rem 1rem rgba(250, 246, 246, 0.986);
+    border-radius: 4rem!important;
+    /* background: rgba(250, 246, 246, 0.986); */
+}
