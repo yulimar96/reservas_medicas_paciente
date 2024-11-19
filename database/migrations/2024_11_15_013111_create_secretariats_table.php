@@ -13,6 +13,17 @@ return new class extends Migration
     {
         Schema::create('secretariats', function (Blueprint $table) {
             $table->id();
+            $table->string('name')->nullable();
+            $table->string('surname1')->nullable();
+            $table->string('ci')->nullable();
+            $table->string('phone')->nullable();
+            $table->string('email')->unique();
+            $table->string('image')->nullable();
+            $table->timestamp('email_verified_at')->nullable();
+            $table->string('password')->nullable();
+            $table->boolean('active')->nullable()->default(true);
+            $table->unsignedBigInteger('user_id');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->timestamps();
         });
     }

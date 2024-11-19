@@ -3,7 +3,9 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>AdminLTE 3 | Starter</title>
+   <!-- Favicon -->
+   <link rel="icon" href="{{ asset('img/logo_clinic1.jpeg') }}" type="image/jpeg">
+  <title>Clinic | Hub</title>
 
   {{-- toats --}}
   {{-- <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" rel="stylesheet"/> --}}

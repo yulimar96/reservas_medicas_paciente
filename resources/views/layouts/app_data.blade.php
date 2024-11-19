@@ -15,7 +15,7 @@
     <!-- Main Sidebar Container -->
     <aside class="main-sidebar elevation-4 info-md" >
         <a href="{{route('home')}}" class="brand-link mb-2">
-            <img src="{{url('dist/img/AdminLTELogo.png')}}" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
+            <img src="{{url('img/logo_clinic1.jpeg')}}" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
             <span class="bg-info py-2 px-3 rounded-sm merriweather-black-italic ">Clinic Hub</span>
         </a>
 

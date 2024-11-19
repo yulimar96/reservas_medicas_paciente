@@ -61,13 +61,19 @@
     <!-- Sidebar Menu -->
     <nav class="mt-2" >
       <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
-             <li class="nav-item">
+        <li class="nav-item">
+            <a href="{{route('home')}}" class="nav-link">
+                <i class="nav-icon fa fa-home" aria-hidden="true"></i>
+                <p>Home</p>
+            </a>
+        </li>
+        <li class="nav-item">
                 <a href="{{route('user.index')}}" class="nav-link">
                     <i class="nav-icon fas fa-users"></i>
                     <p>Gestión de usuarios</p>
                 </a>
             </li>
-            <li class="nav-item">
+            {{-- <li class="nav-item">
                 <a href="#" class="nav-link">
                     <i class="nav-icon fas fa-users"></i>
                     <p>Estadistica<i class="right fas fa-angle-left"></i></p>
@@ -86,11 +92,12 @@
                         </a>
                     </li>
                 </ul>
-            </li>
+            </li> --}}
+
             <li class="nav-item">
-                <a href="{{route('home')}}" class="nav-link">
-                    <i class="nav-icon bi bi-house-door-fill"></i>
-                    <p>Home</p>
+                <a href="{{route('secretariat.index')}}" class="nav-link">
+                    <i class="nav-icon fa fa-briefcase" aria-hidden="true"></i>
+                    <p>Secretarias</p>
                 </a>
             </li>
             <li class="nav-item">

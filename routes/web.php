@@ -21,8 +21,9 @@ Route::middleware(['web', 'auth'])->group(function () {
     // Route::patch('/user/{id}', [App\Http\Controllers\UserController::class, 'update'])->name('user.update');
 });
 Route::middleware(['web', 'auth'])->group(function () {
-    Route::resource('secretaria', SecretariatController::class);
+    Route::resource('secretariat', secretariatController::class);
 });
+
 // Route::group(['middleware' => ['languageSwitcher']], function () {
     // Aquí van tus rutas que necesitan el cambio de idioma
     // Route::get('/', function () {
