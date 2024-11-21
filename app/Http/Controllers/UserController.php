@@ -29,12 +29,14 @@ class UserController extends Controller
     public function store(Request $request)
     {
         try {
-            request()->validate([
+            // Validar los datos de entrada
+            $validatedData = $request->validate([
                 'name' => 'required|string|max:255|regex:/^[a-zA-Z]+$/',
                 'surname1' => 'required|string|max:255|regex:/^[a-zA-Z]+$/',
                 'ci' => 'required|string|max:20|regex:/^[0-9]+$/',
-                'email' => 'required|email|max:255|unique:users,email',
-                'password' => 'required',
+                'email' => 'required|email|max:255|unique:users,email', // El correo debe ser único
+                'password' => 'required|min:6', // La contraseña es obligatoria
+                'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048', // Validar la imagen
             ], [
                 'name.required' => 'El nombre es obligatorio.',
                 'name.regex' => 'El nombre solo puede contener letras.',
@@ -47,21 +49,37 @@ class UserController extends Controller
                 'email.unique' => 'El correo electrónico ya está en uso.',
                 'password.required' => 'La contraseña es obligatoria.',
                 'password.min' => 'La contraseña debe tener al menos 6 caracteres.',
+                'image.image' => 'El archivo debe ser una imagen.',
+                'image.mimes' => 'La imagen debe ser de tipo: jpeg, png, jpg, gif.',
+                'image.max' => 'La imagen no debe pesar más de 2MB.',
             ]);
-            // Crear y guardar el nuevo usuario
-            User::create([
-                'name' => $request->name,
-                'surname1' => $request->surname1,
-                'ci' => $request->ci,
-                'email' => $request->email,
-                'password' => bcrypt($request->password),
-            ]);
-            // swalert2
-                  return redirect()->route('user.index')->with('message', 'Los datos se han registrado corretamente.')
-                  ->with('icono','success');
-    } catch (\Throwable $th) {
-        return redirect()->route('user.index')->with('message', 'verifique los datos e intente nuevamente.'. $th->getMessage())->with('icono','error');
-    }
+
+            // Crear un nuevo usuario
+            $user = new User();
+            $user->name = $validatedData['name'];
+            $user->surname1 = $validatedData['surname1'];
+            $user->ci = $validatedData['ci'];
+            $user->email = $validatedData['email'];
+            $user->password = bcrypt($validatedData['password']); // Encriptar la contraseña
+
+            // Manejar la imagen
+            if ($request->hasFile('image')) {
+                // Subir la nueva imagen
+                $path = $request->file('image')->store('images', 'public'); // Guardar en el directorio 'storage/app/public/images'
+                $user->image = $path; // Guardar la ruta en la base de datos
+            }
+
+            // Guardar el nuevo usuario
+            $user->save();
+
+            // Redirigir con un mensaje de éxito
+            return redirect()->route('user.index')->with('message', 'El usuario se ha creado correctamente.')
+                ->with('icono', 'success');
+        } catch (\Throwable $th) {
+            // Manejo de errores
+            return redirect()->route('user.index')->with('message', 'Verifique los datos e intente nuevamente. ' . $th->getMessage())
+                ->with('icono', 'error');
+        }
     // con alerta de adminlte
     //    return redirect()->route('user.index')->with('success', 'Los datos se han registrado corretamente.');
     // } catch (\Throwable $th) {
@@ -93,12 +111,13 @@ class UserController extends Controller
     {
         try {
             // Validar los datos de entrada
-            request()->validate([
+            $validatedData = $request->validate([
                 'name' => 'required|string|max:255|regex:/^[a-zA-Z]+$/',
                 'surname1' => 'required|string|max:255|regex:/^[a-zA-Z]+$/',
                 'ci' => 'required|string|max:20|regex:/^[0-9]+$/',
                 'email' => 'required|email|max:255|unique:users,email,' . $id, // Permitir el mismo correo electrónico
                 'password' => 'nullable|min:6', // La contraseña es opcional en la actualización
+                'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048', // Validar la imagen
             ], [
                 'name.required' => 'El nombre es obligatorio.',
                 'name.regex' => 'El nombre solo puede contener letras.',
@@ -110,19 +129,35 @@ class UserController extends Controller
                 'email.email' => 'El formato del correo electrónico es inválido.',
                 'email.unique' => 'El correo electrónico ya está en uso.',
                 'password.min' => 'La contraseña debe tener al menos 6 caracteres.',
+                'image.image' => 'El archivo debe ser una imagen.',
+                'image.mimes' => 'La imagen debe ser de tipo: jpeg, png, jpg, gif.',
+                'image.max' => 'La imagen no debe pesar más de 2MB.',
             ]);
 
             // Buscar el usuario existente
             $user = User::findOrFail($id);
 
             // Actualizar los campos del usuario
-            $user->name = $request->name;
-            $user->surname1 = $request->surname1;
-            $user->ci = $request->ci;
-            $user->email = $request->email;
+            $user->name = $validatedData['name'];
+            $user->surname1 = $validatedData['surname1'];
+            $user->ci = $validatedData['ci'];
+            $user->email = $validatedData['email'];
+
             // Si se proporciona una nueva contraseña, actualizarla
             if ($request->filled('password')) {
                 $user->password = bcrypt($request->password);
+            }
+
+            // Manejar la imagen
+            if ($request->hasFile('image')) {
+                // Eliminar la imagen anterior si existe
+                if ($user->image) {
+                    Storage::delete($user->image);
+                }
+
+                // Subir la nueva imagen
+                $path = $request->file('image')->store('images', 'public'); // Guardar en el directorio 'storage/app/public/images'
+                $user->image = $path; // Guardar la ruta en la base de datos
             }
 
             // Guardar los cambios

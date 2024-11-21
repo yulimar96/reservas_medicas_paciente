@@ -56,6 +56,18 @@
                 @enderror
             </div>
         </div>
+        <div class="col-xs-4 col-sm-4 col-md-4">
+            <div class="form-group">
+                <strong>{{ __('Imagen') }}</strong>
+                <input type="file" name="image"
+                       class="form-control form-control-border border-width-2"
+                       id="exampleInputBorderWidth2"
+                       accept="image/*" required>
+                @error('image') <!-- Cambié 'password' por 'image' para que coincida con el campo -->
+                    <small style="color: red">{{ $message }}</small>
+                @enderror
+            </div>
+        </div>
     </div>
 </div>
 <div class="modal-footer justify-content-between">

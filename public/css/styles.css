@@ -87,3 +87,7 @@
     border-radius: 4rem!important;
     /* background: rgba(250, 246, 246, 0.986); */
 }
+
+.img-size-30{
+    width: 30px !important;
+}

@@ -95,11 +95,11 @@
                                 <thead class="letra-th merriweather-light c-info-md">
                                     <tr>
                                         <th>{{ __('Nro') }}</th>
+                                        <th>{{ __('Imagen') }}</th>
                                         <th>{{ __('Name') }}</th>
                                         <th>{{ __('Last Name') }}</th>
                                         <th>{{ __('Email') }}</th>
                                         <th>{{ __('Opciones') }}</th>
-
                                     </tr>
                                 </thead>
                                 <tbody class="table-group-divider">
@@ -107,6 +107,18 @@
                                     @foreach ($users as $user)
                                         <tr>
                                             <td>{{ $contador++ }}</td>
+                                            <td>
+                                                <style>
+                                                    .img-size-30{
+                                                width: 30px !important;
+                                                }
+                                                </style>
+                                                @if ($user->image)
+                                                    <img src="{{ asset('storage/' . $user->image) }}" alt="{{ $user->name }}" class="img-size-30 img-circle">
+                                                @else
+                                                    <span>No image</span>
+                                                @endif
+                                            </td>
                                             <td>{{ $user->name }}</td>
                                             <td>{{ $user->surname1 }}</td>
                                             <td>{{ $user->email }}</td>

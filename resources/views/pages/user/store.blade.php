@@ -1,5 +1,5 @@
 <div class="modal fade" id="store-modal">
-    <form class="user-form create-form" action="{{ route('user.store') }}" method="POST">
+    <form class="user-form create-form" action="{{ route('user.store') }}" method="POST" enctype="multipart/form-data">
         @csrf
         <div class="modal-dialog modal-md">
             <div class="modal-content">
@@ -60,6 +60,18 @@
                                 <input type="password" name="password" class="form-control" required>
                                 <div class="line line-password"></div>
                                 <small class="error-message error-password"></small>
+                            </div>
+                        </div>
+                        <div class="col-xs-4 col-sm-4 col-md-4">
+                            <div class="form-group">
+                                <strong>{{ __('Imagen') }}</strong>
+                                <input type="file" name="image"
+                                       class="form-control form-control-border border-width-2"
+                                       id="exampleInputBorderWidth2"
+                                       accept="image/*" required>
+                                @error('image') <!-- Cambié 'password' por 'image' para que coincida con el campo -->
+                                    <small style="color: red">{{ $message }}</small>
+                                @enderror
                             </div>
                         </div>
                     </div>

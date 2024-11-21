@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Models\secretariat;
 use Illuminate\Http\Request;
 
 class SecretariatController extends Controller
@@ -13,7 +14,8 @@ class SecretariatController extends Controller
     public function index()
     {
         $user = User::count();
-        return view('pages.secretariat.index', compact('user'));
+        $secretariat = secretariat::with('user')->get();
+        return view('pages.secretariat.index', compact('user', 'secretariat'));
     }
 
     /**

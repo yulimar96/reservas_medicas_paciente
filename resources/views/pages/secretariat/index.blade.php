@@ -131,10 +131,88 @@ background: linear-gradient(90deg, rgba(58,103,180,1) 0%, rgba(16,126,117,1) 50%
         </div>
         <!-- ./col -->
       </div>
+      <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-10">
+                <div  class=" card card-info ">{{-- card-outline card-info --}} {{-- <div class="card-icon"> <i class=" c-info-md nav-icon fas fa-users"></i> </div> --}}
+                        <div class="card-header mx-2 mb-2 p-3 rounded-sm info-md merriweather-light">
+                            <div class="row">
+                                <div class="col-6">
+                                    {{ __('Listado de los Usuarios') }}
+                                </div>
+                                <div class="col-6 col-6 text-right ">
+                                    <button type="button" class="btn mx-2"
+                                    data-toggle="modal" data-target="#store-modal"
+                                    style="background: white">
+                                        <i class=" fas fa-plus"></i> <i class=" fas fa-user"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-body p-0 table-responsive">
+                        <div class="col-sm-12 userTest_wrapper dataTables_wrapper
+                        dt-bootstrap4 pt-2 table-responsive">
+                            <table class="userTest table table-striped" role="grid">
+                                <thead class="letra-th merriweather-light c-info-md">
+                                    <tr>
+                                        <th>{{ __('Nombres') }}</th>
+                                        <th>{{ __('CI') }}</th>
+                                        <th>{{ __('Celular') }}</th>
+                                        <th>{{ __('Fecha de nacimiento') }}</th>
+                                        <th>{{ __('Dirección') }}</th>
+                                        <th>{{ __('Email') }}</th>
+                                        <th>{{ __('Opciones') }}</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="table-group-divider">
+                                    <?php $contador = 1; ?>
+                                    @foreach ($secretariat as $user)
+                                        <tr>
+                                            <td>{{ $contador++ }}</td>
+                                            <td>
+                                                <style>
+                                                    .img-size-30{
+                                                width: 30px !important;
+                                                }
+                                                </style>
+                                                @if ($user->image)
+                                                    <img src="{{ asset('storage/' . $user->image) }}" alt="{{ $user->name }}" class="img-size-30 img-circle">
+                                                @else
+                                                    <span>No image</span>
+                                                @endif
+                                            </td>
+                                            <td>{{ $user->name }} {{ $user->surname1 }}</td>
+                                            <td>{{ $user->email }}</td>
+                                            <td>
+                                                <a class="btn btn-primary"
+                                                href="{{ route('user.edit', $user->id) }}">
+                                                <i class="fa fa-user-circle"aria-hidden="true"></i>
+                                            </a>
+                                            <button class="btn btn-sm btn-outline-info edit-button"
+                                            data-id="{{ $user->id }}" data-toggle="modal"
+                                            data-target="#edit-user"><i class="fa fa-edit" aria-hidden="true" alt="editar"></i>
+                                            </button>
+                                            <form id="delete-form-{{ $user->id }}" method="POST" action="{{ route('user.destroy', $user->id) }}" style="display:inline">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button class="btn btn-danger" type="button" onclick="confirmDelete({{ $user->id }}, event);">
+                                                    <i class="fa fa-trash" aria-hidden="true"></i>
+                                                </button>
+                                            </form>
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
-
-   {{-- @include('pages.secretariat.store')
-   @include('pages.secretariat.edit') --}}
+    @include('pages.secretariat.store')
+   {{-- @include('pages.secretariat.edit') --}}
 @endsection
 
 @push('js')
