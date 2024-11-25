@@ -55,164 +55,93 @@
   }
   </style>
 @section('content')
-    <div class="row">
-        <div class="col-12">
-            <h1>Panel administrativo</h1>
+<section class= "content-header">
+    <div class="container-fluid">
+        <div class="row mb-2 ml-5">
+            <div class="col-sm-6">
+                {{-- <a class="btn mx-2 my-2 info-md" href="{{route('user.create')}}"> <i class="bi bi-person-plus-fill"></i></a> --}}
+            </div><!-- /.col -->
+            <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a href="#"><i class="fa fa-address-card" aria-hidden="true"></i></a></li>
+                        <li class="breadcrumb-item active"><i class="fa fa-home" aria-hidden="true"></i></li>
+                    </ol>
+            </div><!-- /.row -->
         </div>
-    </div>
-    <style>
-        .bg-card-azul{
-            background: rgb(58,103,180);
-background: linear-gradient(90deg, rgba(58,103,180,1) 0%, rgba(16,126,117,1) 50%, rgba(0,241,255,0.7035189075630253) 100%);
-        }
-        .color-icon{
-            color: #fff !important;
-        }
-    </style>
-    <div class="row">
-        <div class="col-lg-3 col-6">
-          <!-- small box -->
-          <div class="small-box bg-card-azul">
-            <div class="inner text-white">
-              <h3 >{{$user}}</h3>
-
-              <p>Total de usuarios</p>
-            </div>
-            <div class="icon">
-                <i class="color-icon fa fa-address-card" aria-hidden="true"></i>
-            </div>
-            <a href="{{route('user.index')}}" class="small-box-footer">Más información <i class="fas fa-arrow-circle-right"></i></a>
-          </div>
-        </div>
-        <!-- ./col -->
-        <div class="col-lg-3 col-6">
-          <!-- small box -->
-          <div class="small-box bg-success">
-            <div class="inner">
-              <h3>53<sup style="font-size: 20px">%</sup></h3>
-
-              <p>Bounce Rate</p>
-            </div>
-            <div class="icon">
-              <i class="ion ion-stats-bars"></i>
-            </div>
-            <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
-          </div>
-        </div>
-        <!-- ./col -->
-        <div class="col-lg-3 col-6">
-          <!-- small box -->
-          <div class="small-box bg-warning">
-            <div class="inner">
-              <h3>44</h3>
-
-              <p>User Registrations</p>
-            </div>
-            <div class="icon">
-              <i class="ion ion-person-add"></i>
-            </div>
-            <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
-          </div>
-        </div>
-        <!-- ./col -->
-        <div class="col-lg-3 col-6">
-          <!-- small box -->
-          <div class="small-box bg-danger">
-            <div class="inner">
-              <h3>65</h3>
-
-              <p>Unique Visitors</p>
-            </div>
-            <div class="icon">
-              <i class="ion ion-pie-graph"></i>
-            </div>
-            <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
-          </div>
-        </div>
-        <!-- ./col -->
-      </div>
-      <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-md-10">
-                <div  class=" card card-info ">{{-- card-outline card-info --}} {{-- <div class="card-icon"> <i class=" c-info-md nav-icon fas fa-users"></i> </div> --}}
-                        <div class="card-header mx-2 mb-2 p-3 rounded-sm info-md merriweather-light">
-                            <div class="row">
-                                <div class="col-6">
-                                    {{ __('Listado de los Usuarios') }}
-                                </div>
-                                <div class="col-6 col-6 text-right ">
-                                    <button type="button" class="btn mx-2"
-                                    data-toggle="modal" data-target="#store-modal"
-                                    style="background: white">
-                                        <i class=" fas fa-plus"></i> <i class=" fas fa-user"></i>
-                                    </button>
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-md-10">
+                    <div  class=" card card-info ">{{-- card-outline card-info --}} {{-- <div class="card-icon"> <i class=" c-info-md nav-icon fas fa-users"></i> </div> --}}
+                            <div class="card-header mx-2 mb-2 p-3 rounded-sm info-md merriweather-light">
+                                <div class="row">
+                                    <div class="col-6">
+                                        {{ __('Listado de secretarias registradas') }}
+                                    </div>
+                                    <div class="col-6 col-6 text-right ">
+                                        <button type="button" class="btn mx-2"
+                                        data-toggle="modal" data-target="#store-modal"
+                                        style="background: white">
+                                            <i class=" fas fa-plus"></i> <i class=" fas fa-user"></i>
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="card-body p-0 table-responsive">
-                        <div class="col-sm-12 userTest_wrapper dataTables_wrapper
-                        dt-bootstrap4 pt-2 table-responsive">
-                            <table class="userTest table table-striped" role="grid">
-                                <thead class="letra-th merriweather-light c-info-md">
-                                    <tr>
-                                        <th>{{ __('Nombres') }}</th>
-                                        <th>{{ __('CI') }}</th>
-                                        <th>{{ __('Celular') }}</th>
-                                        <th>{{ __('Fecha de nacimiento') }}</th>
-                                        <th>{{ __('Dirección') }}</th>
-                                        <th>{{ __('Email') }}</th>
-                                        <th>{{ __('Opciones') }}</th>
-                                    </tr>
-                                </thead>
-                                <tbody class="table-group-divider">
-                                    <?php $contador = 1; ?>
-                                    @foreach ($secretariat as $user)
+                            <div class="card-body p-0 table-responsive">
+                            <div class="col-sm-12 userTest_wrapper dataTables_wrapper
+                            dt-bootstrap4 pt-2 table-responsive">
+                                <table class="userTest table table-striped" role="grid">
+                                    <thead class="letra-th merriweather-light c-info-md">
                                         <tr>
-                                            <td>{{ $contador++ }}</td>
-                                            <td>
-                                                <style>
-                                                    .img-size-30{
-                                                width: 30px !important;
-                                                }
-                                                </style>
-                                                @if ($user->image)
-                                                    <img src="{{ asset('storage/' . $user->image) }}" alt="{{ $user->name }}" class="img-size-30 img-circle">
-                                                @else
-                                                    <span>No image</span>
-                                                @endif
-                                            </td>
-                                            <td>{{ $user->name }} {{ $user->surname1 }}</td>
-                                            <td>{{ $user->email }}</td>
-                                            <td>
-                                                <a class="btn btn-primary"
-                                                href="{{ route('user.edit', $user->id) }}">
-                                                <i class="fa fa-user-circle"aria-hidden="true"></i>
-                                            </a>
-                                            <button class="btn btn-sm btn-outline-info edit-button"
-                                            data-id="{{ $user->id }}" data-toggle="modal"
-                                            data-target="#edit-user"><i class="fa fa-edit" aria-hidden="true" alt="editar"></i>
-                                            </button>
-                                            <form id="delete-form-{{ $user->id }}" method="POST" action="{{ route('user.destroy', $user->id) }}" style="display:inline">
-                                                @csrf
-                                                @method('DELETE')
-                                                <button class="btn btn-danger" type="button" onclick="confirmDelete({{ $user->id }}, event);">
-                                                    <i class="fa fa-trash" aria-hidden="true"></i>
-                                                </button>
-                                            </form>
-                                            </td>
+                                            <th>{{ __('Nro') }}</th>
+                                            <th>{{ __('Imagen') }}</th>
+                                            <th>{{ __('Name') }}</th>
+                                            <th>{{ __('Last Name') }}</th>
+                                            <th>{{ __('Email') }}</th>
+                                            <th>{{ __('Opciones') }}</th>
                                         </tr>
-                                    @endforeach
-                                </tbody>
-                            </table>
+                                    </thead>
+                                    <tbody class="table-group-divider">
+                                        <?php $contador = 1; ?>
+                                        @foreach ($secretariat as $user)
+                                            <tr>
+                                                <td>{{ $contador++ }}</td>
+                                                <td>{{ $user->name }}</td>
+                                                <td>{{ $user->surname1 }}</td>
+                                                <td>{{ $user->email }}</td>
+                                                <td>
+                                                    {{-- <a class="btn btn-primary"
+                                                    href="{{ route('user.edit', $user->id) }}">
+                                                    <i class="fa fa-user-circle"aria-hidden="true"></i>
+                                                </a> --}}
+                                                <button class="btn btn-sm btn-outline-info edit-button"
+                                                data-id="{{ $user->id }}" data-toggle="modal"
+                                                data-target="#edit-user"><i class="fa fa-edit" aria-hidden="true" alt="editar"></i>
+                                                </button>
+
+                                                <form id="delete-form-{{ $user->id }}" method="POST" action="{{ route('user.destroy', $user->id) }}" style="display:inline">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <button class="btn btn-danger" type="button" onclick="confirmDelete({{ $user->id }}, event);">
+                                                        <i class="fa fa-trash" aria-hidden="true"></i>
+                                                    </button>
+                                                </form>
+                                                </td>
+                                            </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+    </section>
 
-    @include('pages.secretariat.store')
-   {{-- @include('pages.secretariat.edit') --}}
+
+   @include('pages.user.store')
+  {{-- @include('pages.user.edit') --}}
 @endsection
 
 @push('js')

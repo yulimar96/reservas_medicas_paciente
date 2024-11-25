@@ -6,40 +6,27 @@ use App\Models\secretariat;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Spatie\Permission\Traits\HasRoles;
+use Spatie\Permission\Models\Role;
+use App\Models\Persons;
 
 class User extends Authenticatable
 {
-    /** @use HasFactory<\Database\Factories\UserFactory> */
-    use HasFactory, Notifiable;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array<int, string>
-     */
+    use HasFactory, Notifiable, HasRoles;
+
     protected $fillable = [
         'name',
-        'surname1',
-        'ci,',
         'email',
         'password',
+        'persons_id',
     ];
 
-    /**
-     * The attributes that should be hidden for serialization.
-     *
-     * @var array<int, string>
-     */
     protected $hidden = [
         'password',
         'remember_token',
     ];
 
-    /**
-     * Get the attributes that should be cast.
-     *
-     * @return array<string, string>
-     */
     protected function casts(): array
     {
         return [
@@ -47,10 +34,9 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
-
-        public function secretariat(): HasMany
-        {
-            return $this->hasMany(secretariat::class);
-        }
+    public function person()
+    {
+        return $this->belongsTo(Persons::class, 'persons_id', 'id'); // Cambia 'person_id' a 'persons_id'
+    }
 
 }

@@ -1,58 +1,79 @@
-
 .primary-md {
     background: linear-gradient(60deg, #ab47bc, #8e24aa) !important;
     color: azure !important;
 }
 
 .info-md {
-    background: linear-gradient(74deg, #13d3ebe3, #31abbbfa) !important;
+    background: linear-gradient(74deg, #1291b9, #31abbbfa) !important;
     color: azure !important;
 }
+
 .info-md-sd {
     background: linear-gradient(60deg, #edeeee, #55b5c2) !important;
     color: azure !important;
 }
-.c-info-md{
+
+.c-info-md {
     color: #0f738f !important;
 }
+
 .btn.c-info-md:hover {
     color: #8ACCDE !important;
 }
-.btn-danger{
-    background: linear-gradient(74deg, #f32912, #ef9090fa) !important;
+
+.btn-danger {
+    background: linear-gradient(103deg, #df3232e0, #123027) !important;
     color: azure !important;
 }
-.btn-limpiar{
-    background: linear-gradient(247deg, #00ffff, #16a379) !important;
+
+.btn-limpiar {
+    background: linear-gradient(103deg, #9b32cfe0, #123027) !important;
     color: azure !important;
 }
+
+.btn-edit {
+    background: linear-gradient(103deg, #d27a0ee0, #123027) !important;
+    color: azure !important;
+}
+
 /* .nav a:hover {
     color: #007BFF !important;
     text-decoration: underline !important;
 } */
 .nav a {
-    color:white !important; /* Color del texto normal */
-    text-decoration: none  !important; /* Sin subrayado */
-    cursor: pointer  !important; /* Cambia el cursor a un puntero */
-    padding: 10px  !important; /* Espaciado interno */
-    transition: color 0.15s ease  !important; /* Transición suave para el color */
+    color: white !important;
+    /* Color del texto normal */
+    text-decoration: none !important;
+    /* Sin subrayado */
+    cursor: pointer !important;
+    /* Cambia el cursor a un puntero */
+    padding: 10px !important;
+    /* Espaciado interno */
+    transition: color 0.15s ease !important;
+    /* Transición suave para el color */
 }
 
 .nav a:hover {
-    color: #2aaabe  !important; /* Color del texto al pasar el mouse */
-    text-shadow: #000507 !important; /* Subrayado al pasar el mouse */
+    color: #2aaabe !important;
+    /* Color del texto al pasar el mouse */
+    text-shadow: #000507 !important;
+    /* Subrayado al pasar el mouse */
     background: rgba(42, 170, 190, 0.2) !important;
 }
-.nav-pills .nav-link{
-    color:white !important;
+
+.nav-pills .nav-link {
+    color: white !important;
 }
-.letra-th{
+
+.letra-th {
     font-size: 14px !important;
-    font-weight: 100  !important;
+    font-weight: 100 !important;
 }
-.btn-danger{
+
+.btn-danger {
     background-color: darkred !important;
 }
+
 /* .card-icon{
     padding-top: 10px !important;
     padding-bottom: 2px !important;
@@ -62,32 +83,100 @@
 .card-icon i{
     color: white !important;
 } */
-.card-header button{
+.card-header button {
     background: linear-gradient(74deg, #234d53e3, #bcdee2fa) !important;
     color: white !important;
 }
-.card-header button:hover{
+
+.card-header button:hover {
     background: linear-gradient(74deg, #043541e3, #7cdbe7fa) !important;
     color: white !important;
 }
+
 .form .btn-danger {
-    background: red !important; /* Cambia el fondo a rojo */
-    border-color: red !important; /* Cambia el borde a rojo también */
+    background: red !important;
+    /* Cambia el fondo a rojo */
+    border-color: red !important;
+    /* Cambia el borde a rojo también */
 }
 
 .form .btn-danger:hover {
-    background: darkred !important; /* Cambia el fondo al pasar el mouse */
-    border-color: darkred !important; /* Cambia el borde al pasar el mouse */
+    background: darkred !important;
+    /* Cambia el fondo al pasar el mouse */
+    border-color: darkred !important;
+    /* Cambia el borde al pasar el mouse */
 }
-.border-radius{
-    border-radius: 4rem!important;
+
+.border-radius {
+    border-radius: 1rem !important;
 }
+
 .modal-content {
-    box-shadow: 0 .5rem 1rem rgba(250, 246, 246, 0.986);
-    border-radius: 4rem!important;
+    box-shadow: 0 .2rem 0.2rem rgba(250, 246, 246, 0.986);
+    /* border-radius: 1rem !important; */
     /* background: rgba(250, 246, 246, 0.986); */
 }
 
-.img-size-30{
+.modal-header {
+    /* border-top-left-radius: calc(2rem - 1px) !important;
+    border-top-right-radius: calc(2rem - 1px) !important; */
+    /* background: rgba(250, 246, 246, 0.986); */
+}
+
+.img-size-30 {
     width: 30px !important;
+}
+
+
+.form-control {
+    border: 0px !important;
+}
+
+.line {
+    height: 2px;
+    width: 100%;
+    /* Cambiado a 100% para que ocupe todo el ancho */
+    background-color: gray;
+    /* Color por defecto */
+    transition: background-color 0.3s;
+    /* Transiciones más rápidas */
+    margin-top: 5px;
+}
+
+.line.success {
+    background-color: rgb(0, 225, 255);
+}
+
+.line.error {
+    background-color: red;
+}
+
+.error-message {
+    color: red;
+    font-size: 0.75em;
+}
+
+.table td {
+    padding: 2px !important;
+    margin: 0 !important;
+}
+
+.userTest_wrapper button {
+    background: linear-gradient(45deg, #00dcff, #959ba1) !important;
+    color: white !important;
+    border: none !important;
+    border-radius: 5px !important;
+    padding: 3px 5px !important;
+    margin: 2px !important;
+    transition: background 0.3s, box-shadow 0.3s !important;
+}
+
+.userTest_wrapper button:hover {
+    background: linear-gradient(45deg, #829dbb, #bcc5cf) !important;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2) !important;
+}
+
+/* Estilo para el contenedor de botones */
+.dataTables_wrapper button {
+    margin-bottom: 10px !important;
 }

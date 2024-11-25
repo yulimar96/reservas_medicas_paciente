@@ -1,76 +1,119 @@
 <?php
 
 namespace App\Http\Controllers;
-use App\Models\User;
+
 use Illuminate\Http\Request;
+use Spatie\Permission\Models\Role;
+use App\Models\User;
+use App\Models\FederalStates;
+use App\Models\Municipality;
+use App\Models\Parishes;
+use App\Models\City;
+use App\Models\PhoneAreaCode;
+use App\Models\CellPhoneAreaCode;
+use App\Models\Organizational_unit_types;
+use App\Models\Employee_contract_types;
+use App\Models\EmployeePositions;
+
 
 class UserController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+
     public function index()
     {
-        $users = User::where('active', '=', 1)->get();
-       return view('pages.user.index', compact('users'));
-    }
+        $phones = PhoneAreaCode::all();
+        $cellphone = CellPhoneAreaCode::all();
+        $federalstates = FederalStates::all();
+        $municipality = Municipality::all();
+        $parishes = Parishes::all();
+        $city = City::all();
+        $users = User::with('person')->where('active', true)->get();
+        $roles = Role::all();
+        foreach ($users as $user) {
+            $user->roles = $user->getRoleNames(); // Agregar roles a cada usuario
+            $user->full_name = trim($user->person->name_1 . ' ' . $user->person->name_2 . ' ' . $user->person->surname_1 . ' ' . $user->person->surname_2);
+        }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
+       return view('pages.user.index', compact('users','roles', 'phones', 'cellphone','federalstates','municipality','parishes','city'));
+
+    }
+    public function getMunicipalities($stateId)
     {
-        return view('pages.user.stored');
+        $municipalities = Municipality::where('federal_state_id', $stateId)->get();
+        return response()->json($municipalities);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
+    public function getCities($stateId)
+    {
+        $cities = City::where('federal_state_id', $stateId)->get();
+        return response()->json($cities);
+    }
+
+    public function getParishes($municipalityId)
+    {
+        $parishes = Parishes::where('municipality_id', $municipalityId)->get();
+        return response()->json($parishes);
+    }
+
     public function store(Request $request)
     {
         try {
             // Validar los datos de entrada
             $validatedData = $request->validate([
-                'name' => 'required|string|max:255|regex:/^[a-zA-Z]+$/',
-                'surname1' => 'required|string|max:255|regex:/^[a-zA-Z]+$/',
-                'ci' => 'required|string|max:20|regex:/^[0-9]+$/',
-                'email' => 'required|email|max:255|unique:users,email', // El correo debe ser único
-                'password' => 'required|min:6', // La contraseña es obligatoria
-                'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048', // Validar la imagen
-            ], [
-                'name.required' => 'El nombre es obligatorio.',
-                'name.regex' => 'El nombre solo puede contener letras.',
-                'surname1.required' => 'El apellido es obligatorio.',
-                'surname1.regex' => 'El apellido solo puede contener letras.',
-                'ci.required' => 'El CI es obligatorio.',
-                'ci.regex' => 'El CI solo puede contener números.',
-                'email.required' => 'El correo electrónico es obligatorio.',
-                'email.email' => 'El formato del correo electrónico es inválido.',
-                'email.unique' => 'El correo electrónico ya está en uso.',
-                'password.required' => 'La contraseña es obligatoria.',
-                'password.min' => 'La contraseña debe tener al menos 6 caracteres.',
-                'image.image' => 'El archivo debe ser una imagen.',
-                'image.mimes' => 'La imagen debe ser de tipo: jpeg, png, jpg, gif.',
-                'image.max' => 'La imagen no debe pesar más de 2MB.',
+                // Validación para la tabla Person
+                'name_1' => 'required|string|max:20|regex:/^[a-zA-Z]+$/',
+                'name_2' => 'nullable|string|max:20|regex:/^[a-zA-Z]+$/',
+                'surname_1' => 'required|string|max:20|regex:/^[a-zA-Z]+$/',
+                'surname_2' => 'nullable|string|max:20|regex:/^[a-zA-Z]+$/',
+                'nationality' => 'required|boolean',
+                'identity_number' => 'required|string|max:9|unique:persons,identity_number|regex:/^[0-9]+$/',
+                'sex' => 'required|boolean',
+                'birth_date' => 'nullable|date',
+                'potition_id' => 'required|exists:potitions,id',
+                'organizational_unit_types_id' => 'required|exists:organizational_unit_types,id',
+                'employee_contract_types_id' => 'required|exists:employee_contract_types,id',
+
+                // Validación para la tabla User
+                'name_user' => 'required|string|max:20|regex:/^[a-zA-Z]+$/',
+                'email' => 'required|email|max:255|unique:users,email',
+                'password' => 'required|min:6',
+                'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+                'role_id' => 'required|exists:roles,id', // Validación para el rol
             ]);
+
+            // Crear la entrada en la tabla persons
+            $person = new Person();
+            $person->name_1 = $validatedData['name_1'];
+            $person->name_2 = $validatedData['name_2'];
+            $person->surname_1 = $validatedData['surname_1'];
+            $person->surname_2 = $validatedData['surname_2'];
+            $person->nationality = $request->input('nationality');
+            $person->identity_number = $validatedData['identity_number'];
+            $person->sex = $validatedData['sex'];
+            $person->birth_date = $validatedData['birth_date'];
+            $person->potition_id = $validatedData['potition_id'];
+            $person->organizational_unit_types_id = $validatedData['organizational_unit_types_id'];
+            $person->employee_contract_types_id = $validatedData['employee_contract_types_id'];
+            $person->save();
 
             // Crear un nuevo usuario
             $user = new User();
-            $user->name = $validatedData['name'];
-            $user->surname1 = $validatedData['surname1'];
-            $user->ci = $validatedData['ci'];
+            $user->name_user = $validatedData['name_user']; // O el campo que desees usar
             $user->email = $validatedData['email'];
-            $user->password = bcrypt($validatedData['password']); // Encriptar la contraseña
+            $user->password = bcrypt($validatedData['password']);
+            $user->persons_id = $person->id; // Relacionar con la tabla persons
 
             // Manejar la imagen
             if ($request->hasFile('image')) {
-                // Subir la nueva imagen
-                $path = $request->file('image')->store('images', 'public'); // Guardar en el directorio 'storage/app/public/images'
-                $user->image = $path; // Guardar la ruta en la base de datos
+                $path = $request->file('image')->store('images', 'public');
+                $user->image = $path;
             }
 
             // Guardar el nuevo usuario
             $user->save();
+
+            // Asignar rol
+            $user->assignRole($validatedData['role_id']); // Asigna el rol al usuario
 
             // Redirigir con un mensaje de éxito
             return redirect()->route('user.index')->with('message', 'El usuario se ha creado correctamente.')
@@ -80,101 +123,93 @@ class UserController extends Controller
             return redirect()->route('user.index')->with('message', 'Verifique los datos e intente nuevamente. ' . $th->getMessage())
                 ->with('icono', 'error');
         }
-    // con alerta de adminlte
-    //    return redirect()->route('user.index')->with('success', 'Los datos se han registrado corretamente.');
-    // } catch (\Throwable $th) {
-    //     return redirect()->route('user.index')->with('error', 'verifique los datos e intente nuevamente.'. $th->getMessage());
-    // }
     }
-
-    /**
-     * Display the specified resource.
-     */
     public function show(string $id)
     {
         //
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
     public function edit(string $id)
     {
         $user = User::find($id);
     return response()->json($user);
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(Request $request, string $id)
-    {
-        try {
-            // Validar los datos de entrada
-            $validatedData = $request->validate([
-                'name' => 'required|string|max:255|regex:/^[a-zA-Z]+$/',
-                'surname1' => 'required|string|max:255|regex:/^[a-zA-Z]+$/',
-                'ci' => 'required|string|max:20|regex:/^[0-9]+$/',
-                'email' => 'required|email|max:255|unique:users,email,' . $id, // Permitir el mismo correo electrónico
-                'password' => 'nullable|min:6', // La contraseña es opcional en la actualización
-                'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048', // Validar la imagen
-            ], [
-                'name.required' => 'El nombre es obligatorio.',
-                'name.regex' => 'El nombre solo puede contener letras.',
-                'surname1.required' => 'El apellido es obligatorio.',
-                'surname1.regex' => 'El apellido solo puede contener letras.',
-                'ci.required' => 'El CI es obligatorio.',
-                'ci.regex' => 'El CI solo puede contener números.',
-                'email.required' => 'El correo electrónico es obligatorio.',
-                'email.email' => 'El formato del correo electrónico es inválido.',
-                'email.unique' => 'El correo electrónico ya está en uso.',
-                'password.min' => 'La contraseña debe tener al menos 6 caracteres.',
-                'image.image' => 'El archivo debe ser una imagen.',
-                'image.mimes' => 'La imagen debe ser de tipo: jpeg, png, jpg, gif.',
-                'image.max' => 'La imagen no debe pesar más de 2MB.',
-            ]);
+{
+    try {
+        // Validar los datos de entrada
+        $validatedData = $request->validate([
+            // Validación para la tabla Person
+            'name_1' => 'required|string|max:20|regex:/^[a-zA-Z]+$/',
+            'name_2' => 'nullable|string|max:20|regex:/^[a-zA-Z]+$/',
+            'surname_1' => 'required|string|max:20|regex:/^[a-zA-Z]+$/',
+            'surname_2' => 'nullable|string|max:20|regex:/^[a-zA-Z]+$/',
+            'nationality' => 'required|boolean',
+            'identity_number' => 'required|string|max:9|regex:/^[0-9]+$/|unique:persons,identity_number,' . $id,
+            'sex' => 'required|boolean',
+            'birth_date' => 'nullable|date',
+            'potition_id' => 'required|exists:potitions,id',
+            'organizational_unit_types_id' => 'required|exists:organizational_unit_types,id',
+            'employee_contract_types_id' => 'required|exists:employee_contract_types,id',
 
-            // Buscar el usuario existente
-            $user = User::findOrFail($id);
+            // Validación para la tabla User
+            'name_user' => 'required|string|max:20|regex:/^[a-zA-Z]+$/',
+            'email' => 'required|email|max:255|unique:users,email,' . $id,
+            'password' => 'nullable|min:6', // La contraseña es opcional en la actualización
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'role_id' => 'required|exists:roles,id', // Validación para el rol
+        ]);
 
-            // Actualizar los campos del usuario
-            $user->name = $validatedData['name'];
-            $user->surname1 = $validatedData['surname1'];
-            $user->ci = $validatedData['ci'];
-            $user->email = $validatedData['email'];
+        // Buscar la entrada de Person
+        $person = Person::findOrFail($id);
+        $person->name_1 = $validatedData['name_1'];
+        $person->name_2 = $validatedData['name_2'];
+        $person->surname_1 = $validatedData['surname_1'];
+        $person->surname_2 = $validatedData['surname_2'];
+        $person->nacionality = $validatedData['identity_number'];
+        $person->identity_number = $validatedData['identity_number'];
+        $person->nationality = $request->input('nationality');
+        $person->sex = $validatedData['sex'];
+        $person->birth_date = $validatedData['birth_date'];
+        $person->potition_id = $validatedData['potition_id'];
+        $person->organizational_unit_types_id = $validatedData['organizational_unit_types_id'];
+        $person->employee_contract_types_id = $validatedData['employee_contract_types_id'];
+        $person->save();
 
-            // Si se proporciona una nueva contraseña, actualizarla
-            if ($request->filled('password')) {
-                $user->password = bcrypt($request->password);
-            }
+        // Buscar la entrada de User
+        $user = User::where('persons_id', $person->id)->firstOrFail();
+        $user->name_user = $validatedData['name_user']; // O el campo que desees usar
+        $user->email = $validatedData['email'];
 
-            // Manejar la imagen
-            if ($request->hasFile('image')) {
-                // Eliminar la imagen anterior si existe
-                if ($user->image) {
-                    Storage::delete($user->image);
-                }
+        // Actualizar la contraseña solo si se proporciona
+        if ($validatedData['password']) {
+            $user->password = bcrypt($validatedData['password']);
+        }
 
-                // Subir la nueva imagen
-                $path = $request->file('image')->store('images', 'public'); // Guardar en el directorio 'storage/app/public/images'
-                $user->image = $path; // Guardar la ruta en la base de datos
-            }
+        // Manejar la imagen
+        if ($request->hasFile('image')) {
+            $path = $request->file('image')->store('images', 'public');
+            $user->image = $path;
+        }
 
-            // Guardar los cambios
-            $user->save();
+        // Guardar el usuario actualizado
+        $user->save();
 
-            // Redirigir con un mensaje de éxito
-            return redirect()->route('user.index')->with('message', 'Los datos se han actualizado correctamente.')
-                ->with('icono', 'success');
-        } catch (\Throwable $th) {
+        // Sincronizar roles
+        $user->syncRoles([$validatedData['role_id']]); // Sincroniza el rol
+
+        // Redirigir con un mensaje de éxito
+        return redirect()->route('user.index')->with('message', 'El usuario se ha actualizado correctamente.')
+            ->with('icono', 'success');
+    } catch (\Throwable $th) {
             // Manejo de errores
             return redirect()->route('user.index')->with('message', 'Verifique los datos e intente nuevamente. ' . $th->getMessage())
                 ->with('icono', 'error');
         }
     }
-    /**
-     * Remove the specified resource from storage.
-     */
+
+
     public function destroy(string $id)
     {
         // Encuentra al usuario por su ID

@@ -2,157 +2,68 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\User;
-use App\Models\secretariat;
+use App\Models\Secretariat;
 use Illuminate\Http\Request;
 
 class SecretariatController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
-        $user = User::count();
-        $secretariat = secretariat::with('user')->get();
-        return view('pages.secretariat.index', compact('user', 'secretariat'));
+        // Cargar las secretarías con la relación de persona
+        $secretariats = Secretariat::with('person')->get();
+        return view('secretariats.index', compact('secretariats'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
+    // Método para mostrar el formulario de creación
     public function create()
     {
-        //
+        return view('secretariats.create');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
+    // Método para almacenar una nueva secretaría
     public function store(Request $request)
     {
-        try {
-            request()->validate([
-                'name' => 'required|string|max:255|regex:/^[a-zA-Z]+$/',
-                'surname1' => 'required|string|max:255|regex:/^[a-zA-Z]+$/',
-                'ci' => 'required|string|max:20|regex:/^[0-9]+$/',
-                'email' => 'required|email|max:255|unique:secretariats,email',
-                'password' => 'required',
-            ], [
-                'name.required' => 'El nombre es obligatorio.',
-                'name.regex' => 'El nombre solo puede contener letras.',
-                'surname1.required' => 'El apellido es obligatorio.',
-                'surname1.regex' => 'El apellido solo puede contener letras.',
-                'ci.required' => 'El CI es obligatorio.',
-                'ci.regex' => 'El CI solo puede contener números.',
-                'email.required' => 'El correo electrónico es obligatorio.',
-                'email.email' => 'El formato del correo electrónico es inválido.',
-                'email.unique' => 'El correo electrónico ya está en uso.',
-                'password.required' => 'La contraseña es obligatoria.',
-                'password.min' => 'La contraseña debe tener al menos 6 caracteres.',
-            ]);
-            // Crear y guardar el nuevo usuario
-            secretariat::create([
-                'name' => $request->name,
-                'surname1' => $request->surname1,
-                'ci' => $request->ci,
-                'email' => $request->email,
-                'password' => bcrypt($request->password),
-            ]);
-            // swalert2
-                  return redirect()->route('secretariat.index')->with('message', 'Los datos se han registrado corretamente.')
-                  ->with('icono','success');
-    } catch (\Throwable $th) {
-        return redirect()->route('secretariat.index')->with('message', 'verifique los datos e intente nuevamente.'. $th->getMessage())->with('icono','error');
-    }
-}
+        $validatedData = $request->validate([
+            'id_person' => 'required|exists:persons,id',
+            // Otros campos de validación según tus requisitos
+        ]);
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(secretariat $secretariat)
-    {
-        //
+        Secretariat::create($validatedData);
+        return redirect()->route('secretariats.index')->with('success', 'Secretaría creada exitosamente.');
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(secretariat $secretariat)
+    // Método para mostrar una secretaría específica
+    public function show($id)
     {
-        //
+        $secretariat = Secretariat::with('person')->findOrFail($id);
+        return view('secretariats.show', compact('secretariat'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, secretariat $secretariat)
+    // Método para mostrar el formulario de edición
+    public function edit($id)
     {
-        try {
-            // Validar los datos de entrada
-            request()->validate([
-                'name' => 'required|string|max:255|regex:/^[a-zA-Z]+$/',
-                'surname1' => 'required|string|max:255|regex:/^[a-zA-Z]+$/',
-                'ci' => 'required|string|max:20|regex:/^[0-9]+$/',
-                'email' => 'required|email|max:255|unique:secretariats,email,' . $id, // Permitir el mismo correo electrónico
-                'password' => 'nullable|min:6', // La contraseña es opcional en la actualización
-            ], [
-                'name.required' => 'El nombre es obligatorio.',
-                'name.regex' => 'El nombre solo puede contener letras.',
-                'surname1.required' => 'El apellido es obligatorio.',
-                'surname1.regex' => 'El apellido solo puede contener letras.',
-                'ci.required' => 'El CI es obligatorio.',
-                'ci.regex' => 'El CI solo puede contener números.',
-                'email.required' => 'El correo electrónico es obligatorio.',
-                'email.email' => 'El formato del correo electrónico es inválido.',
-                'email.unique' => 'El correo electrónico ya está en uso.',
-                'password.min' => 'La contraseña debe tener al menos 6 caracteres.',
-            ]);
-
-            // Buscar el usuario existente
-            $secretariat = secretariat::findOrFail($id);
-
-            // Actualizar los campos del usuario
-            $secretariat->name = $request->name;
-            $secretariat->surname1 = $request->surname1;
-            $secretariat->ci = $request->ci;
-            $secretariat->email = $request->email;
-            // Si se proporciona una nueva contraseña, actualizarla
-            if ($request->filled('password')) {
-                $secretariat->password = bcrypt($request->password);
-            }
-
-            // Guardar los cambios
-            $secretariat->save();
-
-            // Redirigir con un mensaje de éxito
-            return redirect()->route('secretariat.index')->with('message', 'Los datos se han actualizado correctamente.')
-                ->with('icono', 'success');
-        } catch (\Throwable $th) {
-            // Manejo de errores
-            return redirect()->route('secretariat.index')->with('message', 'Verifique los datos e intente nuevamente. ' . $th->getMessage())
-                ->with('icono', 'error');
-        }
+        $secretariat = Secretariat::findOrFail($id);
+        return view('secretariats.edit', compact('secretariat'));
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(secretariat $secretariat)
+    // Método para actualizar una secretaría
+    public function update(Request $request, $id)
     {
-         // Encuentra al usuario por su ID
-         $secretariat = secretariat::find($id);
+        $validatedData = $request->validate([
+            'id_person' => 'required|exists:persons,id',
+            // Otros campos de validación según tus requisitos
+        ]);
 
-         // Verifica si el usuario existe
-         if (!$secretariat) {
-             return response()->json(['message' => 'Usuario no encontrado.'], 404);
-         }
+        $secretariat = Secretariat::findOrFail($id);
+        $secretariat->update($validatedData);
+        return redirect()->route('secretariats.index')->with('success', 'Secretaría actualizada exitosamente.');
+    }
 
-         // Deshabilitar al usuario
-         $secretariat->active = false;
-         $secretariat->save();
-
-         return redirect()->route('secretariat.index')->with('message', 'El usuario ha sido deshabilitado correctamente.')->with('icono', 'success');
-
+    // Método para eliminar una secretaría
+    public function destroy($id)
+    {
+        $secretariat = Secretariat::findOrFail($id);
+        $secretariat->delete();
+        return redirect()->route('secretariats.index')->with('success', 'Secretaría eliminada exitosamente.');
     }
 }
