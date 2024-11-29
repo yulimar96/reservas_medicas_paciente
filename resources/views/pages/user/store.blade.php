@@ -57,19 +57,19 @@
                         </div>
                         <div class="col-xs-4 col-sm-4 col-md-4">
                             <div class="form-group">
-                                <label for="nationality">Nacionalidad</label>
-                                <select name="nationality" id="nationality">
-                                    <option value="1">V-</option>
-                                    <option value="0">E-</option>
+                                <label for="sex">Sexo</label>
+                                <select name="sex" id="sex">
+                                    <option value="1">H</option>
+                                    <option value="0">M</option>
                                 </select>
                             </div>
                         </div>
                         <div class="col-xs-4 col-sm-4 col-md-4">
                             <div class="form-group">
-                                <label for="sex">Sexo</label>
-                                <select name="sex" id="sex">
-                                    <option value="1">H</option>
-                                    <option value="0">M</option>
+                                <label for="nationality">Nacionalidad</label>
+                                <select name="nationality" id="nationality">
+                                    <option value="1">V-</option>
+                                    <option value="0">E-</option>
                                 </select>
                             </div>
                         </div>
@@ -81,18 +81,20 @@
                                 <small class="error-message error-ci"></small>
                             </div>
                         </div>
-                        <div class="col-xs-2 col-sm-2 col-md-2">
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-3 col-sm-3 col-md-3">
                             <div class="form-group">
                                 <label for="phone_area">cod. area</label>
                                 <select name="phone_area_codes_id" id="phone_area">
-                                    <option value="" disabled selected>Seleccione un code</option>
+                                    <option value="" disabled selected>Opción</option>
                                     @foreach ($phones as $phone)
                                         <option value="{{ $phone->id }}">{{ $phone->code }}</option>
                                     @endforeach
                                 </select>
                             </div>
                         </div>
-                        <div class="col-xs-4 col-sm-4 col-md-4">
+                        <div class="col-xs-3 col-sm-3 col-md-3">
                             <div class="form-group">
                                 <label for="phone_number">phone_number</label>
                                 <input type="text" name="phone_number" class="form-control" required>
@@ -100,18 +102,20 @@
                                 <small class="error-message error-phone_number"></small>
                             </div>
                         </div>
-                        <div class="col-xs-2 col-sm-2 col-md-2">
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-3 col-sm-3 col-md-3">
                             <div class="form-group">
-                                <label for="cellphone">cell cod. area</label>
+                                <label for="cellphone">cod. area</label>
                                 <select name="cell_phone_area_codes_id" id="CellPhoneAreaCode">
-                                    <option value="" disabled selected>Seleccione un cod</option>
+                                    <option value="" disabled selected>Opción</option>
                                     @foreach ($cellphone as $cell)
                                         <option value="{{ $cell->id }}">{{ $cell->code }}</option>
                                     @endforeach
                                 </select>
                             </div>
                         </div>
-                        <div class="col-xs-4 col-sm-4 col-md-4">
+                        <div class="col-xs-3 col-sm-3 col-md-3">
                             <div class="form-group">
                                 <label for="cellphone_number">cellphone_number</label>
                                 <input type="text" name="cellphone_number" class="form-control" required>
@@ -119,88 +123,95 @@
                                 <small class="error-message error-cellphone_number"></small>
                             </div>
                         </div>
-                        <div class="form-group">
-                            <label for="federal_state">Estado Federal</label>
-                            <select name="federal_state" id="federal_state">
-                                <option value="">Seleccione un estado federal</option>
-                                @foreach ($federalstates as $state)
-                                    <option value="{{ $state->id }}">{{ $state->name }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-
-                        <div class="form-group" id="municipality-container" style="display: none;">
-                            <label for="municipality">Municipio</label>
-                            <select name="municipality" id="municipality">
-                                <option value="">Seleccione un municipio</option>
-                            </select>
-                        </div>
-
-                        <div class="form-group" id="city-container" style="display: none;">
-                            <label for="city">Ciudad</label>
-                            <select name="city" id="city">
-                                <option value="">Seleccione una ciudad</option>
-                            </select>
-                        </div>
-
-                        <div class="form-group" id="parish-container" style="display: none;">
-                            <label for="parish">Parroquia</label>
-                            <select name="parish" id="parish">
-                                <option value="">Seleccione una parroquia</option>
-                            </select>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="role">Rol</label>
-                            <select class="form-control" name="role_id" required>
-                                <option value="" disabled selected>Seleccione un rol</option>
-                                @foreach ($roles as $role)
-                                    <option value="{{ $role->id }}">{{ $role->name }}</option>
-                                @endforeach
-                            </select>
-                            <div class="error-message error-role text-danger" style="display:none;"></div>
-                        </div>
-
-                        <div class="col-xs-4 col-sm-4 col-md-4">
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-3 col-sm-3 col-md-3">
                             <div class="form-group">
-                                <label for="email">Email</label>
-                                <input type="email" class="form-control" name="email" required
-                                    autocomplete="current-email">
-                                <div class="line line-email"></div>
-                                <small class="error-message error-email"></small>
+                                <label for="federal_state">Estado Federal</label>
+                                <select name="federal_state" id="federal_state">
+                                    <option value="">Seleccione un estado federal</option>
+                                    @foreach ($federalstates as $state)
+                                        <option value="{{ $state->id }}">{{ $state->name }}</option>
+                                    @endforeach
+                                </select>
                             </div>
                         </div>
-                        <div class="col-xs-4 col-sm-4 col-md-4">
-                            <div class="form-group">
-                                <label for="password">Contraseña</label>
-                                <input type="password" name="password" class="form-control" required
-                                    autocomplete="current-password">
-                                <div class="line line-password"></div>
-                                <small class="error-message error-password"></small>
+                        <div class="col-xs-3 col-sm-3 col-md-3">
+                            <div class="form-group" id="municipality-container" style="display: none;">
+                                <label for="municipality">Municipio</label>
+                                <select name="municipality" id="municipality">
+                                    <option value="">Seleccione un municipio</option>
+                                </select>
                             </div>
                         </div>
-                        <div class="col-xs-4 col-sm-4 col-md-4">
-                            <div class="form-group">
-                                <strong>{{ __('Imagen') }}</strong>
-                                <input type="file" name="image"
-                                    class="form-control form-control-border border-width-2"
-                                    id="exampleInputBorderWidth2" accept="image/*" required>
-                                @error('image')
-                                    <!-- Cambié 'password' por 'image' para que coincida con el campo -->
-                                    <small style="color: red">{{ $message }}</small>
-                                @enderror
+                        <div class="col-xs-3 col-sm-3 col-md-3">
+                            <div class="form-group" id="city-container" style="display: none;">
+                                <label for="city">Ciudad</label>
+                                <select name="city" id="city">
+                                    <option value="">Seleccione una ciudad</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-xs-3 col-sm-3 col-md-3">
+                            <div class="form-group" id="parish-container" style="display: none;">
+                                <label for="parish">Parroquia</label>
+                                <select name="parish" id="parish">
+                                    <option value="">Seleccione una parroquia</option>
+                                </select>
                             </div>
                         </div>
                     </div>
-                </div>
-                <div class="modal-footer justify-content-between">
-                    <button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
-                    <button type="reset" class="btn btn-limpiar">Limpiar</button>
-                    <button type="submit" class="btn info-md submit-btn" disabled>Guardar</button>
+                    <div class="form-group">
+                        <label for="role">Rol</label>
+                        <select class="form-control" name="role_id" required>
+                            <option value="" disabled selected>Seleccione un rol</option>
+                            @foreach ($roles as $role)
+                                <option value="{{ $role->id }}">{{ $role->name }}</option>
+                            @endforeach
+                        </select>
+                        <div class="error-message error-role text-danger" style="display:none;"></div>
+                    </div>
+
+                    <div class="col-xs-4 col-sm-4 col-md-4">
+                        <div class="form-group">
+                            <label for="email">Email</label>
+                            <input type="email" class="form-control" name="email" required
+                                autocomplete="current-email">
+                            <div class="line line-email"></div>
+                            <small class="error-message error-email"></small>
+                        </div>
+                    </div>
+                    <div class="col-xs-4 col-sm-4 col-md-4">
+                        <div class="form-group">
+                            <label for="password">Contraseña</label>
+                            <input type="password" name="password" class="form-control" required
+                                autocomplete="current-password">
+                            <div class="line line-password"></div>
+                            <small class="error-message error-password"></small>
+                        </div>
+                    </div>
+                    <div class="col-xs-4 col-sm-4 col-md-4">
+                        <div class="form-group">
+                            <strong>{{ __('Imagen') }}</strong>
+                            <input type="file" name="image"
+                                class="form-control form-control-border border-width-2" id="exampleInputBorderWidth2"
+                                accept="image/*" required>
+                            @error('image')
+                                <!-- Cambié 'password' por 'image' para que coincida con el campo -->
+                                <small style="color: red">{{ $message }}</small>
+                            @enderror
+                        </div>
+                    </div>
                 </div>
             </div>
+            <div class="modal-footer justify-content-between">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
+                <button type="reset" class="btn btn-limpiar">Limpiar</button>
+                <button type="submit" class="btn info-md submit-btn" disabled>Guardar</button>
+            </div>
         </div>
-    </form>
+</div>
+</form>
 </div>
 <!-- /.modal -->
 
