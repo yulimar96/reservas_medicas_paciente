@@ -69,6 +69,8 @@ class UserController extends Controller
                 'identity_number' => 'required|string|max:9|unique:persons,identity_number|regex:/^[0-9]+$/',
                 'sex' => 'required|boolean',
                 'birth_date' => 'nullable|date',
+                'home_phone' => 'nullable|string|max:20|regex:/^[0-9]+$/',
+                'mobile_phone' => 'nullable|string|max:20|regex:/^[0-9]+$/',
                 'potition_id' => 'required|exists:potitions,id',
                 'organizational_unit_types_id' => 'required|exists:organizational_unit_types,id',
                 'employee_contract_types_id' => 'required|exists:employee_contract_types,id',
@@ -81,36 +83,36 @@ class UserController extends Controller
                 'role_id' => 'required|exists:roles,id', // Validación para el rol
             ]);
 
+            $phoneArea = $request-> phone_area;
+            $homePhone = $phoneArea. $validatedData['phone_number'];
             // Crear la entrada en la tabla persons
-            $person = new Person();
-            $person->name_1 = $validatedData['name_1'];
-            $person->name_2 = $validatedData['name_2'];
-            $person->surname_1 = $validatedData['surname_1'];
-            $person->surname_2 = $validatedData['surname_2'];
-            $person->nationality = $request->input('nationality');
-            $person->identity_number = $validatedData['identity_number'];
-            $person->sex = $validatedData['sex'];
-            $person->birth_date = $validatedData['birth_date'];
-            $person->potition_id = $validatedData['potition_id'];
-            $person->organizational_unit_types_id = $validatedData['organizational_unit_types_id'];
-            $person->employee_contract_types_id = $validatedData['employee_contract_types_id'];
-            $person->save();
+            $person = Person::create([
+                'name_1' => $validatedData['name_1'],
+                'name_2' => $validatedData['name_2'],
+                'surname_1' => $validatedData['surname_1'],
+                'surname_2' => $validatedData['surname_2'],
+                'nationality' => $request->input('nationality'),
+                'identity_number' => $validatedData['identity_number'],
+                'sex' => $validatedData['sex'],
+                'birth_date' => $validatedData['birth_date'],
+                'potition_id' => $validatedData['potition_id'],
+                'organizational_unit_types_id' => $validatedData['organizational_unit_types_id'],
+                'employee_contract_types_id' => $validatedData['employee_contract_types_id'],
+            ]);
 
             // Crear un nuevo usuario
-            $user = new User();
-            $user->name_user = $validatedData['name_user']; // O el campo que desees usar
-            $user->email = $validatedData['email'];
-            $user->password = bcrypt($validatedData['password']);
-            $user->persons_id = $person->id; // Relacionar con la tabla persons
+            $user = User::crete([
+                'name_user' =>$validatedData['name_user'],
+                'email' => $validatedData['email'],
+                'password' => bcrypt($validatedData['password']),
+                'persons_id' => $person->id // Relacionar con la tabla persons
+            ]);
 
             // Manejar la imagen
             if ($request->hasFile('image')) {
                 $path = $request->file('image')->store('images', 'public');
                 $user->image = $path;
             }
-
-            // Guardar el nuevo usuario
-            $user->save();
 
             // Asignar rol
             $user->assignRole($validatedData['role_id']); // Asigna el rol al usuario
@@ -161,6 +163,8 @@ class UserController extends Controller
             'role_id' => 'required|exists:roles,id', // Validación para el rol
         ]);
 
+        $homephone->phone_area->code;
+
         // Buscar la entrada de Person
         $person = Person::findOrFail($id);
         $person->name_1 = $validatedData['name_1'];
@@ -172,6 +176,8 @@ class UserController extends Controller
         $person->nationality = $request->input('nationality');
         $person->sex = $validatedData['sex'];
         $person->birth_date = $validatedData['birth_date'];
+        $phone_area->request->phone_area;
+        $phone_home
         $person->potition_id = $validatedData['potition_id'];
         $person->organizational_unit_types_id = $validatedData['organizational_unit_types_id'];
         $person->employee_contract_types_id = $validatedData['employee_contract_types_id'];
