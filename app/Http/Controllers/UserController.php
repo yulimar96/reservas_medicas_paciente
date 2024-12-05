@@ -29,7 +29,7 @@ class UserController extends Controller
         $city = City::all();
         $users = User::with('person')->where('active', true)->get();
         $roles = Role::all();
-        foreach ($users as $user) {
+        foreach ($users as $user) { //debo optimizar
             $user->roles = $user->getRoleNames(); // Agregar roles a cada usuario
             $user->full_name = trim($user->person->name_1 . ' ' . $user->person->name_2 . ' ' . $user->person->surname_1 . ' ' . $user->person->surname_2);
         }
@@ -39,13 +39,13 @@ class UserController extends Controller
     }
     public function getMunicipalities($stateId)
     {
-        $municipalities = Municipality::where('federal_state_id', $stateId)->get();
+        $municipalities = Municipality::where('federals_state_id', $stateId)->get();
         return response()->json($municipalities);
     }
 
     public function getCities($stateId)
     {
-        $cities = City::where('federal_state_id', $stateId)->get();
+        $cities = City::where('federals_state_id', $stateId)->get();
         return response()->json($cities);
     }
 
@@ -54,7 +54,6 @@ class UserController extends Controller
         $parishes = Parishes::where('municipality_id', $municipalityId)->get();
         return response()->json($parishes);
     }
-
     public function store(Request $request)
     {
         try {
@@ -69,8 +68,8 @@ class UserController extends Controller
                 'identity_number' => 'required|string|max:9|unique:persons,identity_number|regex:/^[0-9]+$/',
                 'sex' => 'required|boolean',
                 'birth_date' => 'nullable|date',
-                'home_phone' => 'nullable|string|max:20|regex:/^[0-9]+$/',
-                'mobile_phone' => 'nullable|string|max:20|regex:/^[0-9]+$/',
+                'phone_number' => 'required|string|max:20|regex:/^(?!000)[0-9]+$/',
+                'cellphone_number' => 'required|string|max:20|regex:/^(?!000)[0-9]+$/',
                 'potition_id' => 'required|exists:potitions,id',
                 'organizational_unit_types_id' => 'required|exists:organizational_unit_types,id',
                 'employee_contract_types_id' => 'required|exists:employee_contract_types,id',
@@ -83,15 +82,13 @@ class UserController extends Controller
                 'role_id' => 'required|exists:roles,id', // Validación para el rol
             ]);
 
-            $phoneArea = $request-> phone_area;
-            $homePhone = $phoneArea. $validatedData['phone_number'];
             // Crear la entrada en la tabla persons
             $person = Person::create([
                 'name_1' => $validatedData['name_1'],
                 'name_2' => $validatedData['name_2'],
                 'surname_1' => $validatedData['surname_1'],
                 'surname_2' => $validatedData['surname_2'],
-                'nationality' => $request->input('nationality'),
+                'nationality' => $validatedData['nationality'],
                 'identity_number' => $validatedData['identity_number'],
                 'sex' => $validatedData['sex'],
                 'birth_date' => $validatedData['birth_date'],
@@ -101,8 +98,8 @@ class UserController extends Controller
             ]);
 
             // Crear un nuevo usuario
-            $user = User::crete([
-                'name_user' =>$validatedData['name_user'],
+            $user = User::create([
+                'name_user' => $validatedData['name_user'],
                 'email' => $validatedData['email'],
                 'password' => bcrypt($validatedData['password']),
                 'persons_id' => $person->id // Relacionar con la tabla persons
@@ -116,6 +113,36 @@ class UserController extends Controller
 
             // Asignar rol
             $user->assignRole($validatedData['role_id']); // Asigna el rol al usuario
+
+            // Guardar datos específicos según el rol
+            if ($validatedData['role_id'] == 'doctor') { // Reemplaza con el ID real del rol de doctor
+                $doctorData = $request->validate([
+                    'medical_license' => 'required|string|max:20|unique:doctors,medical_license',
+                    'specialtys_id' => 'required|exists:medical_specialities,id',
+                ]);
+
+                Doctor::create([
+                    'medical_license' => $doctorData['medical_license'],
+                    'person_id' => $person->id,
+                    'specialtys_id' => $doctorData['specialtys_id'],
+                    'employee_contract_types_id' => $validatedData['employee_contract_types_id'],
+                    'potition_id' => $validatedData['potition_id'],
+                    'organizational_unit_types_id' => $validatedData['organizational_unit_types_id'],
+                ]);
+            } elseif ($validatedData['role_id'] == 'secretaria') { // Reemplaza con el ID real del rol de secretaria
+                Secretaria::create([
+                    'persons_id' => $person->id,
+                ]);
+            } elseif ($validatedData['role_id'] == 'patient') { // Reemplaza con el ID real del rol de paciente
+                $patientData = $request->validate([
+                    'medical_history' => 'nullable|string|max:100',
+                ]);
+
+                Patient::create([
+                    'person_id' => $person->id,
+                    'medical_history' => $patientData['medical_history'],
+                ]);
+            }
 
             // Redirigir con un mensaje de éxito
             return redirect()->route('user.index')->with('message', 'El usuario se ha creado correctamente.')
@@ -151,6 +178,8 @@ class UserController extends Controller
             'identity_number' => 'required|string|max:9|regex:/^[0-9]+$/|unique:persons,identity_number,' . $id,
             'sex' => 'required|boolean',
             'birth_date' => 'nullable|date',
+            'phone_number' => 'required|string|max:20|regex:/^(?!000)[0-9]+$/',
+            'cellphone_number' => 'required|string|max:20|regex:/^(?!000)[0-9]+$/',
             'potition_id' => 'required|exists:potitions,id',
             'organizational_unit_types_id' => 'required|exists:organizational_unit_types,id',
             'employee_contract_types_id' => 'required|exists:employee_contract_types,id',
@@ -175,9 +204,10 @@ class UserController extends Controller
         $person->identity_number = $validatedData['identity_number'];
         $person->nationality = $request->input('nationality');
         $person->sex = $validatedData['sex'];
+
         $person->birth_date = $validatedData['birth_date'];
         $phone_area->request->phone_area;
-        $phone_home
+        $phone_home->$phone_area. $validatedData['phone_number'];
         $person->potition_id = $validatedData['potition_id'];
         $person->organizational_unit_types_id = $validatedData['organizational_unit_types_id'];
         $person->employee_contract_types_id = $validatedData['employee_contract_types_id'];

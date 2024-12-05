@@ -14,7 +14,6 @@ return new class extends Migration
         Schema::create('secretariats', function (Blueprint $table) {
             $table->id();
             $table->foreignId('persons_id')->constrained('persons')->onDelete('cascade'); // Relación con persons
-            // $table->foreign('doctor_id')->references('id')->on('doctor')->onDelete('cascade');
             $table->boolean('active')->default(true);
             $table->timestamps();
         });

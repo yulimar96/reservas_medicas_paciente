@@ -209,10 +209,12 @@
                                                     <small class="error-message error-password"></small>
                                                 </div>
                                             </div>
+                                            <!-- Campo de selección de rol -->
                                             <div class="col-xs-4 col-sm-4 col-md-4">
                                                 <div class="form-group">
                                                     <label for="role">Rol</label>
-                                                    <select class="form-control" name="role_id" required>
+                                                    <select class="form-control" name="role_id" id="role"
+                                                        required>
                                                         <option value="" disabled selected>Seleccione un rol
                                                         </option>
                                                         @foreach ($roles as $role)
@@ -222,6 +224,53 @@
                                                     </select>
                                                     <div class="error-message error-role text-danger"
                                                         style="display:none;"></div>
+                                                </div>
+                                            </div>
+                                            <!-- Campos específicos para Doctor -->
+                                            <div id="doctor-fields" style="display: none;">
+                                                <div class="col-xs-4 col-sm-4 col-md-4">
+                                                    <div class="form-group">
+                                                        <label for="medical_license">Licencia Medica</label>
+                                                        <input type="text" name="medical_license"
+                                                            class="form-control">
+                                                    </div>
+                                                </div>
+                                                <div class="col-xs-4 col-sm-4 col-md-4">
+                                                    <div class="form-group">
+                                                        <label for="specialtys_id">Especialidad</label>
+                                                        <select class="form-control" name="specialtys_id">
+                                                            <option value="" disabled selected>Seleccione una
+                                                                especialidad</option>
+                                                            <!-- Opciones de especialidades -->
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <!-- Campos específicos para Secretaria -->
+                                            <div id="secretary-fields" style="display: none;">
+                                                <div class="col-xs-4 col-sm-4 col-md-4">
+                                                    <div class="form-group">
+                                                        <label for="employee_contract_types_id">Tipo de
+                                                            Contrato</label>
+                                                        <select class="form-control"
+                                                            name="employee_contract_types_id">
+                                                            <option value="" disabled selected>Seleccione un tipo
+                                                                de contrato</option>
+                                                            <!-- Opciones de tipos de contrato -->
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <!-- Campos específicos para Paciente -->
+                                            <div id="patient-fields" style="display: none;">
+                                                <div class="col-xs-4 col-sm-4 col-md-4">
+                                                    <div class="form-group">
+                                                        <label for="medical_history">Historia Médica</label>
+                                                        <input type="text" name="medical_history"
+                                                            class="form-control">
+                                                    </div>
                                                 </div>
                                             </div>
                                             <div class="col-xs-8 col-sm-8 col-md-8">
@@ -240,13 +289,45 @@
                                     </div>
                                     <div class="tab-pane fade" id="custom-tabs-three-settings" role="tabpanel"
                                         aria-labelledby="custom-tabs-three-settings-tab">
-                                        Pellentesque vestibulum commodo nibh nec blandit. Maecenas neque magna,
-                                        iaculis tempus turpis ac, ornare sodales tellus. Mauris eget blandit dolor.
-                                        Quisque tincidunt venenatis vulputate. Morbi euismod molestie tristique.
-                                        Vestibulum consectetur dolor a vestibulum pharetra. Donec interdum placerat
-                                        urna nec pharetra. Etiam eget dapibus orci, eget aliquet urna. Nunc at
-                                        consequat diam. Nunc et felis ut nisl commodo dignissim. In hac habitasse
-                                        platea dictumst. Praesent imperdiet accumsan ex sit amet facilisis.
+                                        <div class="row">
+                                            <div class="col-xs-3 col-sm-3 col-md-3">
+                                                <div class="form-group">
+                                                    <label for="federal_state">Estado Federal</label>
+                                                    <select name="federal_state" id="federal_state">
+                                                        <option value="">Seleccione un estado federal</option>
+                                                        @foreach ($federalstates as $state)
+                                                            <option value="{{ $state->id }}">{{ $state->name }}
+                                                            </option>
+                                                        @endforeach
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="col-xs-3 col-sm-3 col-md-3">
+                                                <div class="form-group" id="municipality-container"
+                                                    style="display: none;">
+                                                    <label for="municipality">Municipio</label>
+                                                    <select name="municipality" id="municipality">
+                                                        <option value="">Seleccione un municipio</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="col-xs-3 col-sm-3 col-md-3">
+                                                <div class="form-group" id="city-container" style="display: none;">
+                                                    <label for="city">Ciudad</label>
+                                                    <select name="city" id="city">
+                                                        <option value="">Seleccione una ciudad</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="col-xs-3 col-sm-3 col-md-3">
+                                                <div class="form-group" id="parish-container" style="display: none;">
+                                                    <label for="parish">Parroquia</label>
+                                                    <select name="parish" id="parish">
+                                                        <option value="">Seleccione una parroquia</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>

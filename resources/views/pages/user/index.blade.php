@@ -250,6 +250,8 @@
                         $.each(data, function(index, municipality) {
                             $('#municipality').append('<option value="' + municipality.id +
                                 '">' + municipality.name + '</option>');
+                            console.log(municipality.name);
+
                         });
                         $('#municipality-container').show();
                     });
@@ -257,7 +259,7 @@
                     // Obtener ciudades
                     $.get('/cities/' + stateId, function(data) {
                         $('#city').empty().append(
-                        '<option value="">Seleccione una ciudad</option>');
+                            '<option value="">Seleccione una ciudad</option>');
                         $.each(data, function(index, city) {
                             $('#city').append('<option value="' + city.id + '">' + city
                                 .name + '</option>');
@@ -332,35 +334,41 @@
                 let isValid = true;
 
                 // Lógica de validación
-                if (input.attr('name') === 'name') {
-                    const namePattern = /^[a-zA-Z]+$/;
-                    if (!namePattern.test(input.val())) {
-                        isValid = false;
-                        errorMessage.text("Por favor, ingresa un nombre válido.");
-                    }
-                } else if (input.attr('name') === 'email') {
-                    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-                    if (!emailPattern.test(input.val())) {
-                        isValid = false;
-                        errorMessage.text("Por favor, ingresa un correo electrónico válido.");
-                    }
-                } else if (input.attr('name') === 'password') {
-                    if (input.val().length < 6) {
-                        isValid = false;
-                        errorMessage.text("La contraseña debe tener al menos 6 caracteres.");
-                    }
-                } else if (input.attr('name') === 'surname1') {
-                    const surnamePattern = /^[a-zA-Z]+$/;
-                    if (!surnamePattern.test(input.val())) {
-                        isValid = false;
-                        errorMessage.text("Por favor, ingresa un apellido válido.");
-                    }
-                } else if (input.attr('name') === 'ci') {
-                    const ciPattern = /^\d+$/;
-                    if (!ciPattern.test(input.val())) {
-                        isValid = false;
-                        errorMessage.text("Por favor, ingresa un CI válido.");
-                    }
+                const namePattern = /^[a-zA-Z]+$/;
+                const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                const ciPattern = /^\d+$/;
+
+                switch (input.attr('name')) {
+                    case 'name':
+                        if (!namePattern.test(input.val())) {
+                            isValid = false;
+                            errorMessage.text("Por favor, ingresa un nombre válido.");
+                        }
+                        break;
+                    case 'email':
+                        if (!emailPattern.test(input.val())) {
+                            isValid = false;
+                            errorMessage.text("Por favor, ingresa un correo electrónico válido.");
+                        }
+                        break;
+                    case 'password':
+                        if (input.val().length < 6) {
+                            isValid = false;
+                            errorMessage.text("La contraseña debe tener al menos 6 caracteres.");
+                        }
+                        break;
+                    case 'surname1':
+                        if (!namePattern.test(input.val())) {
+                            isValid = false;
+                            errorMessage.text("Por favor, ingresa un apellido válido.");
+                        }
+                        break;
+                    case 'ci':
+                        if (!ciPattern.test(input.val())) {
+                            isValid = false;
+                            errorMessage.text("Por favor, ingresa un CI válido.");
+                        }
+                        break;
                 }
 
                 // Despliega la línea de color según la validez
@@ -416,6 +424,109 @@
                     this.submit(); // Envía el formulario
                 }
             });
+
+            // Lógica para manejar la selección de estado federal, municipio, ciudad y parroquia
+            let debounceTimer;
+            $('#federal_state').change(function() {
+                clearTimeout(debounceTimer);
+                debounceTimer = setTimeout(() => {
+                    var stateId = $(this).val();
+                    if (stateId) {
+                        // Obtener municipios
+                        $.ajax({
+                            url: '/municipalities/' + stateId,
+                            method: 'GET',
+                            success: function(data) {
+                                $('#municipality').empty().append(
+                                    '<option value="">Seleccione un municipio</option>'
+                                );
+                                $.each(data, function(index, municipality) {
+                                    $('#municipality').append(
+                                        '<option value="' + municipality
+                                        .id + '">' + municipality.name +
+                                        '</option>');
+                                });
+                                $('#municipality-container').show();
+                            },
+                            error: function() {
+                                alert('Error al cargar municipios.');
+                            }
+                        });
+
+                        // Obtener ciudades
+                        $.ajax({
+                            url: '/cities/' + stateId,
+                            method: 'GET',
+                            success: function(data) {
+                                $('#city').empty().append(
+                                    '<option value="">Seleccione una ciudad</option>'
+                                );
+                                $.each(data, function(index, city) {
+                                    $('#city').append('<option value="' + city
+                                        .id + '">' + city.name + '</option>'
+                                    );
+                                });
+                                $('#city-container').show();
+                            },
+                            error: function() {
+                                alert('Error al cargar ciudades.');
+                            }
+                        });
+                    } else {
+                        $('#municipality-container').hide();
+                        $('#city-container').hide();
+                        $('#parish-container').hide();
+                    }
+                }, 1); // Tiempo de espera para debounce
+            });
+
+            $('#municipality').change(function() {
+                var municipalityId = $(this).val();
+                if (municipalityId) {
+                    $.ajax({
+                        url: '/parishes/' + municipalityId,
+                        method: 'GET',
+                        success: function(data) {
+                            $('#parish').empty().append(
+                                '<option value="">Seleccione una parroquia</option>');
+                            $.each(data, function(index, parish) {
+                                $('#parish').append('<option value="' + parish.id +
+                                    '">' + parish.name + '</option>');
+                            });
+                            $('#parish-container').show();
+                        },
+                        error: function() {
+                            alert('Error al cargar parroquias.');
+                        }
+                    });
+                } else {
+                    $('#parish-container').hide();
+                }
+            });
+
+            // Manejo de la edición de usuario
+            $('.edit-button').on('click', function() {
+                var userId = $(this).data('id'); // Obtiene el ID del usuario desde el botón
+
+                // Realiza una solicitud GET para obtener los datos del usuario
+                $.get('/user/' + userId + '/edit', function(data) {
+                    // Llena los campos del formulario con los datos del usuario
+                    $('.user_id').val(data.id);
+                    $('.name_1').val(data.name);
+                    $('.surname_1').val(data.surname1);
+                    $('.ci').val(data.ci);
+                    $('.email').val(data.email);
+                    $('.password').val(''); // Mantén la contraseña vacía para no mostrarla
+
+                    // Cambia la acción del formulario para incluir el ID del usuario
+                    $('.edit-form').attr('action', '{{ url('user') }}/' + data.id);
+
+                    // Muestra el modal
+                    $('#edit-user').modal('show');
+                }).fail(function() {
+                    alert('Error al cargar los datos del usuario.');
+                });
+            });
         });
     </script>
     <script>
@@ -458,5 +569,29 @@
             const formattedValue = value.charAt(0).toUpperCase() + value.slice(1).toLowerCase();
             input.value = formattedValue;
         }
+    </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const roleSelect = document.getElementById('role');
+            const doctorFields = document.getElementById('doctor-fields');
+            const secretaryFields = document.getElementById('secretary-fields');
+            const patientFields = document.getElementById('patient-fields');
+
+            roleSelect.addEventListener('change', function() {
+                // Ocultar todos los campos
+                doctorFields.style.display = 'none';
+                secretaryFields.style.display = 'none';
+                patientFields.style.display = 'none';
+
+                // Mostrar campos según el rol seleccionado
+                if (this.value == '3') { // ID del rol de doctor
+                    doctorFields.style.display = 'block';
+                } else if (this.value == '2') { // ID del rol de secretario
+                    secretaryFields.style.display = 'block';
+                } else if (this.value == '4') { // ID del rol de paciente
+                    patientFields.style.display = 'block';
+                }
+            });
+        });
     </script>
 @endpush
