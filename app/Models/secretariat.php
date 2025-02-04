@@ -7,7 +7,7 @@ use App\Models\Persons;
 
 use Illuminate\Database\Eloquent\Model;
 
-class secretariat extends Model
+class Secretariat extends Model
 {
     protected $fillable = ['persons_id',
     'employee_contract_types_id',

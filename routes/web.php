@@ -27,16 +27,3 @@ Route::middleware(['web', 'auth'])->group(function () {
 Route::middleware(['web', 'auth'])->group(function () {
     Route::resource('secretariat', secretariatController::class);
 });
-
-// Route::group(['middleware' => ['languageSwitcher']], function () {
-    // Aquí van tus rutas que necesitan el cambio de idioma
-    // Route::get('/', function () {
-        // return view('home');
-    // });
-
-    // Otras rutas...
-// });
-Route::get('lang/{lang}', function ($lang) {
-    Session::put('applocale', $lang);
-    return redirect()->back();
-})->name('lang.switch');

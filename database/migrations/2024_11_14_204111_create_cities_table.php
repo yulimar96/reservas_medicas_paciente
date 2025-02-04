@@ -12,7 +12,7 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->tinyInteger('capital');
-            $table->integer('federals_state_id')->unsigned();
+            $table->bigInteger('federals_state_id')->unsigned();
             $table->foreign('federals_state_id')->references('id')->on('federals_state')->onDelete('cascade');
             $table->timestamps();
         });

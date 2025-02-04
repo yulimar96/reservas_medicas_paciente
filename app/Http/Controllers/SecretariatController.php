@@ -9,9 +9,8 @@ class SecretariatController extends Controller
 {
     public function index()
     {
-        // Cargar las secretarías con la relación de persona
         $secretariats = Secretariat::with('person')->get();
-        return view('secretariats.index', compact('secretariats'));
+        return view('pages.secretariat.index', compact('secretariats'));
     }
 
     // Método para mostrar el formulario de creación

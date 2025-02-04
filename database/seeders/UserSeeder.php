@@ -25,7 +25,7 @@ class UserSeeder extends Seeder
             'email' => 'yuli@gmail.com',
             'password' => bcrypt('123456789'),
             'persons_id' => 1, // ID de la persona Yulimar
-           // ID de la persona Yulimar
+            'image' => 'user.jpg',
         ]);
         $user->assignRole('Admin');
 
@@ -34,7 +34,7 @@ class UserSeeder extends Seeder
             'email' => 'Carmen@gmail.com',
             'password' => bcrypt('password'),
             'persons_id' => 2,
-            // ID de la persona Carmen
+            'image' => 'user.jpg',
         ]);
         $user->assignRole('Secretaria'); // Asegúrate de que este rol exista
 
@@ -43,7 +43,7 @@ class UserSeeder extends Seeder
             'email' => 'Elena@gmail.com',
             'password' => bcrypt('password'),
             'persons_id' => 3,
-             // ID de la persona Elena
+            'image' => 'user.jpg',
         ]);
         $user->assignRole('Doctor');
 
@@ -52,7 +52,7 @@ class UserSeeder extends Seeder
             'email' => 'Marta@gmail.com',
             'password' => bcrypt('password'),
             'persons_id' => 4,
-            // ID de la persona Marta
+            'image' => 'user.jpg',
         ]);
         $user->assignRole('Patient');
 

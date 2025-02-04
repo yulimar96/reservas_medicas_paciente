@@ -11,7 +11,7 @@ return new class extends Migration
         Schema::create('parishes', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->integer('municipality_id')->unsigned();
+            $table->bigInteger('municipality_id')->unsigned();
             $table->foreign('municipality_id')->references('id')->on('municipalities')->onDelete('cascade');
             $table->timestamps();
         });

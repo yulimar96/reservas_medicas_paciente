@@ -4,14 +4,14 @@
     <link rel="stylesheet" href="{{ asset('datatable/css/dataTables.bootstrap4.min.css') }}">
     <link rel="stylesheet" href="{{ asset('datatable/css/responsive.bootstrap4.min.css') }}">
     <link rel="stylesheet" href="{{ asset('datatable/css/buttons.bootstrap4.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/styles.css') }}">
+
 @endpush
 @section('content')
     <section class= "content-header">
         <div class="container-fluid">
-            <div class="row mb-2 ml-5">
+            <div class="mb-2 ml-5 row">
                 <div class="col-sm-6">
-                    {{-- <a class="btn mx-2 my-2 info-md" href="{{route('user.create')}}"> <i class="bi bi-person-plus-fill"></i></a> --}}
+                    {{-- <a class="mx-2 my-2 btn info-md" href="{{route('user.create')}}"> <i class="bi bi-person-plus-fill"></i></a> --}}
                 </div><!-- /.col -->
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
@@ -24,26 +24,25 @@
             <div class="container">
                 <div class="row justify-content-center">
                     <div class="col-md-10">
-                        <div class=" card card-info ">{{-- card-outline card-info --}} {{-- <div class="card-icon"> <i class=" c-info-md nav-icon fas fa-users"></i> </div> --}}
-                            <div class="card-header mx-2 mb-2 p-3 rounded-sm info-md merriweather-light">
+                        <div class=" card card-primary">{{-- card-outline card-info --}} {{-- <div class="card-icon"> <i class=" c-info-md nav-icon fas fa-users"></i> </div> --}}
+                            <div class="p-3 mx-2 mb-2 rounded-sm card-header info-md merriweather-light">
                                 <div class="row">
                                     <div class="col-6">
                                         {{ __('Listado de Usuarios registrados') }}
                                     </div>
-                                    <div class="col-6 col-6 text-right ">
-                                        <button type="button" class="btn mx-2" data-toggle="modal"
+                                    <div class="text-right col-6 ">
+                                        <button type="button" class="mx-2 btn " data-toggle="modal"
                                             data-target="#store-modal">
                                             <i class=" fas fa-plus"></i> <i class=" fas fa-user"></i>
                                         </button>
                                     </div>
                                 </div>
                             </div>
-                            <div class="card-body p-0 table-responsive">
+                            <div class="p-0 card-body table-responsive">
                                 <div
-                                    class="col-sm-12 userTest_wrapper dataTables_wrapper
-                        dt-bootstrap4 pt-2 table-responsive">
-                                    <table class="userTest table table-striped" role="grid">
-                                        <thead class="letra-th merriweather-light c-info-md">
+                                    class="pt-2 col-sm-12 userTest_wrapper dataTables_wrapper dt-bootstrap4 table-responsive">
+                                    <table class="table userTest table-striped" role="grid">
+                                        <thead class="letra-th merriweather-light">
                                             <tr>
                                                 <th>{{ __('Nro') }}</th>
                                                 <th>{{ __('Avatar') }}</th>
@@ -73,18 +72,20 @@
                                                         @endif
                                                     </td>
                                                     <td>{{ $user->full_name }} </td>
-                                                    @foreach ($user->roles as $role)
-                                                        <td><span
-                                                                class="right badge badge-success">{{ $role }}</span>
-                                                        </td>
-                                                    @endforeach
+                                                    <td>
+                                                        @foreach ($user->roles as $role)
+                                                            @php
+                                                                // Obtener el color del rol
+                                                                $badgeClass = $roleColors[$role] ?? 'gray';
+                                                            @endphp
+                                                            <span class="badge {{ $badgeClass }}" >
+                                                                {{ $role}}
+                                                            </span>
+                                                        @endforeach
+                                                    </td>
                                                     <td>{{ $user->email }}</td>
                                                     <td>
-                                                        {{-- <a class="btn btn-primary"
-                                                href="{{ route('user.edit', $user->id) }}">
-                                                <i class="fa fa-user-circle"aria-hidden="true"></i>
-
-                                            </a> --}} <button
+                                                         <button
                                                             class="btn btn-sm btn-outline-info edit-button"
                                                             data-id="{{ $user->id }}" data-toggle="modal"
                                                             data-target="#edit-user"><i class="fa fa-edit"
@@ -135,7 +136,7 @@
     <script src="{{ asset('datatable/js/jszip.min.js') }}"></script>
     <script src="{{ asset('datatable/js/pdfmake.min.js') }}"></script>
     <script src="{{ asset('datatable/js/vfs_fonts.js') }}"></script>
-
+    <script src="{{ asset('js/dataTable.js') }}"></script>
     <script>
         $(document).ready(function() {
             // Selecciona los formularios de usuario
@@ -405,9 +406,9 @@
                 submitBtn.prop('disabled', !formIsValid); // Habilita o deshabilita el botón
             });
 
-            // Validar al enviar el formulario
+
             $('.user-form').on('submit', function(event) {
-                event.preventDefault(); // Evita el envío del formulario por defecto
+                event.preventDefault();
 
                 const form = $(this);
                 const formIsValid = validateForm(form);
@@ -420,8 +421,8 @@
                         confirmButtonText: 'Aceptar'
                     });
                 } else {
-                    // Si el formulario es válido, envíalo
-                    this.submit(); // Envía el formulario
+
+                    this.submit();
                 }
             });
 

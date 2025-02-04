@@ -30,6 +30,7 @@ return new class extends Migration
             $table->foreignId('cities_id')->constrained('cities')->onDelete('cascade')->nullable();
             $table->string('address', 100)->nullable();
             $table->date('birth_date')->nullable();
+            $table->foreignId('potition_id')->constrained('Potitions')->onDelete('cascade')->nullable();
             $table->boolean('active')->default(true);
             $table->timestamps();
         });

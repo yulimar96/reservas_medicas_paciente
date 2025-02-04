@@ -33,8 +33,14 @@ class UserController extends Controller
             $user->roles = $user->getRoleNames(); // Agregar roles a cada usuario
             $user->full_name = trim($user->person->name_1 . ' ' . $user->person->name_2 . ' ' . $user->person->surname_1 . ' ' . $user->person->surname_2);
         }
+        $roleColors = [
+           'Admin' => 'badge-admin',
+           'Secretaria' => 'badge-secretaria',
+           'Doctor' => 'badge-doctor',
+           'Patient' => 'badge-patient',
+        ];
 
-       return view('pages.user.index', compact('users','roles', 'phones', 'cellphone','federalstates','municipality','parishes','city'));
+       return view('pages.user.index', compact('roleColors','users','roles', 'phones', 'cellphone','federalstates','municipality','parishes','city'));
 
     }
     public function getMunicipalities($stateId)
@@ -60,6 +66,7 @@ class UserController extends Controller
             // Validar los datos de entrada
             $validatedData = $request->validate([
                 // Validación para la tabla Person
+                'name_user' => 'required|string|max:20|regex:/^[a-zA-Z]+$/',
                 'name_1' => 'required|string|max:20|regex:/^[a-zA-Z]+$/',
                 'name_2' => 'nullable|string|max:20|regex:/^[a-zA-Z]+$/',
                 'surname_1' => 'required|string|max:20|regex:/^[a-zA-Z]+$/',
@@ -70,9 +77,9 @@ class UserController extends Controller
                 'birth_date' => 'nullable|date',
                 'phone_number' => 'required|string|max:20|regex:/^(?!000)[0-9]+$/',
                 'cellphone_number' => 'required|string|max:20|regex:/^(?!000)[0-9]+$/',
-                'potition_id' => 'required|exists:potitions,id',
-                'organizational_unit_types_id' => 'required|exists:organizational_unit_types,id',
-                'employee_contract_types_id' => 'required|exists:employee_contract_types,id',
+                'potition_id' => 'nullable|exists:potitions,id',
+                'organizational_unit_types_id' => 'nullable|exists:organizational_unit_types,id',
+                'employee_contract_types_id' => 'nullable|exists:employee_contract_types,id',
 
                 // Validación para la tabla User
                 'name_user' => 'required|string|max:20|regex:/^[a-zA-Z]+$/',

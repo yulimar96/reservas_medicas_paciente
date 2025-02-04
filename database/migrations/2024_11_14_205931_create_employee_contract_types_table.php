@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('employee_contract_types', function (Blueprint $table) {
             $table->id();
-            $table->string('name', 20);
-            $table->string('description', 100);
+            $table->string('name', 200);
+            $table->string('description', 200);
             $table->foreignId('headquarter_id')->constrained('headquarters')->onDelete('cascade'); // Relación con especialidades
             $table->boolean('active')->default(true);
             $table->timestamps();

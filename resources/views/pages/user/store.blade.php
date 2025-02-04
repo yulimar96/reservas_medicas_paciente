@@ -44,7 +44,7 @@
                                         <a class="nav-link" id="custom-tabs-three-settings-tab" data-toggle="pill"
                                             href="#custom-tabs-three-settings" role="tab"
                                             aria-controls="custom-tabs-three-settings"
-                                            aria-selected="false">Settings</a>
+                                            aria-selected="false">{{__('Address')}}</a>
                                     </li>
                                 </ul>
                             </div>
@@ -253,8 +253,7 @@
                                                     <div class="form-group">
                                                         <label for="employee_contract_types_id">Tipo de
                                                             Contrato</label>
-                                                        <select class="form-control"
-                                                            name="employee_contract_types_id">
+                                                        <select class="form-control" name="employee_contract_types_id">
                                                             <option value="" disabled selected>Seleccione un tipo
                                                                 de contrato</option>
                                                             <!-- Opciones de tipos de contrato -->

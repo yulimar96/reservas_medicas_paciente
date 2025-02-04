@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('closing_time');
             $table->string('schedule');
             $table->unsignedBigInteger('schedule_id');
-            $table->foreign('schedule_id')->references('id')->on('schedule')->onDelete('cascade');
+            $table->foreign('schedule_id')->references('id')->on('schedules')->onDelete('cascade');
             $table->boolean('active')->default(true);
             $table->timestamps();
         });

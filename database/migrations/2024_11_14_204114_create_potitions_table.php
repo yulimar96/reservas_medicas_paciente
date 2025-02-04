@@ -10,8 +10,8 @@ return new class extends Migration
     {
         Schema::create('Potitions', function (Blueprint $table) {
             $table->id();
-            $table->string('name', 20); // Nombre del cargo (ej. secretaria, paciente, doctor)
-            $table->string('description', 100);
+            $table->string('name', 200); // Nombre del cargo (ej. secretaria, paciente, doctor)
+            $table->string('description', 200);
             $table->boolean('active')->default(true);
             $table->timestamps();
         });

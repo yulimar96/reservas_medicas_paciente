@@ -57,9 +57,9 @@
 @section('content')
 <section class= "content-header">
     <div class="container-fluid">
-        <div class="row mb-2 ml-5">
+        <div class="mb-2 ml-5 row">
             <div class="col-sm-6">
-                {{-- <a class="btn mx-2 my-2 info-md" href="{{route('user.create')}}"> <i class="bi bi-person-plus-fill"></i></a> --}}
+                {{-- <a class="mx-2 my-2 btn info-md" href="{{route('user.create')}}"> <i class="bi bi-person-plus-fill"></i></a> --}}
             </div><!-- /.col -->
             <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
@@ -71,14 +71,14 @@
         <div class="container">
             <div class="row justify-content-center">
                 <div class="col-md-10">
-                    <div  class=" card card-info ">{{-- card-outline card-info --}} {{-- <div class="card-icon"> <i class=" c-info-md nav-icon fas fa-users"></i> </div> --}}
-                            <div class="card-header mx-2 mb-2 p-3 rounded-sm info-md merriweather-light">
+                    <div  class=" card card-info">
+                            <div class="p-3 mx-2 mb-2 rounded-sm card-header info-md merriweather-light">
                                 <div class="row">
                                     <div class="col-6">
-                                        {{ __('Listado de secretarias registradas') }}
+                                        <h5>{{ __('Listado de secretarias registradas') }}</h5>
                                     </div>
-                                    <div class="col-6 col-6 text-right ">
-                                        <button type="button" class="btn mx-2"
+                                    <div class="text-right col-6 ">
+                                        <button type="button" class="mx-2 btn btn-primary"
                                         data-toggle="modal" data-target="#store-modal"
                                         style="background: white">
                                             <i class=" fas fa-plus"></i> <i class=" fas fa-user"></i>
@@ -86,12 +86,12 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="card-body p-0 table-responsive">
-                            <div class="col-sm-12 userTest_wrapper dataTables_wrapper
-                            dt-bootstrap4 pt-2 table-responsive">
-                                <table class="userTest table table-striped" role="grid">
-                                    <thead class="letra-th merriweather-light c-info-md">
-                                        <tr>
+                            <div class="p-0 card-body table-responsive">
+                                <div
+                                    class="pt-2 col-sm-12 userTest_wrapper dataTables_wrapper dt-bootstrap4 table-responsive">
+                                    <table class="table userTest table-striped" role="grid">
+                                        <thead class="letra-th merriweather-light">
+                                            <tr>
                                             <th>{{ __('Nro') }}</th>
                                             <th>{{ __('Imagen') }}</th>
                                             <th>{{ __('Name') }}</th>
@@ -102,7 +102,7 @@
                                     </thead>
                                     <tbody class="table-group-divider">
                                         <?php $contador = 1; ?>
-                                        @foreach ($secretariat as $user)
+                                        @foreach ($secretariats as $user)
                                             <tr>
                                                 <td>{{ $contador++ }}</td>
                                                 <td>{{ $user->name }}</td>
@@ -140,7 +140,7 @@
     </section>
 
 
-   @include('pages.user.store')
+   @include('pages.secretariat.store')
   {{-- @include('pages.user.edit') --}}
 @endsection
 
@@ -148,56 +148,22 @@
 <script src="{{ asset('datatable/js/jquery-3.6.0.min.js') }}"></script>
 
 <!-- DataTables JS -->
-<script src="{{ asset('datatable/js/jquery.dataTables.min.js') }}"></script>
-<script src="{{ asset('datatable/js/dataTables.bootstrap4.min.js') }}"></script>
-<script src="{{ asset('datatable/js/dataTables.responsive.min.js') }}"></script>
-<script src="{{ asset('datatable/js/responsive.bootstrap4.min.js') }}"></script>
-<script src="{{ asset('datatable/js/dataTables.buttons.min.js') }}"></script>
-<script src="{{ asset('datatable/js/buttons.bootstrap4.min.js') }}"></script>
-<script src="{{ asset('datatable/js/buttons.html5.min.js') }}"></script>
-<script src="{{ asset('datatable/js/buttons.print.min.js') }}"></script>
-<script src="{{ asset('datatable/js/buttons.colVis.min.js') }}"></script>
-<script src="{{ asset('datatable/js/jszip.min.js') }}"></script>
-<script src="{{ asset('datatable/js/pdfmake.min.js') }}"></script>
-<script src="{{ asset('datatable/js/vfs_fonts.js') }}"></script>
-
+    <!-- DataTables JS -->
+    <script src="{{ asset('datatable/js/jquery.dataTables.min.js') }}"></script>
+    <script src="{{ asset('datatable/js/dataTables.bootstrap4.min.js') }}"></script>
+    <script src="{{ asset('datatable/js/dataTables.responsive.min.js') }}"></script>
+    <script src="{{ asset('datatable/js/responsive.bootstrap4.min.js') }}"></script>
+    <script src="{{ asset('datatable/js/dataTables.buttons.min.js') }}"></script>
+    <script src="{{ asset('datatable/js/buttons.bootstrap4.min.js') }}"></script>
+    <script src="{{ asset('datatable/js/buttons.html5.min.js') }}"></script>
+    <script src="{{ asset('datatable/js/buttons.print.min.js') }}"></script>
+    <script src="{{ asset('datatable/js/buttons.colVis.min.js') }}"></script>
+    <script src="{{ asset('datatable/js/jszip.min.js') }}"></script>
+    <script src="{{ asset('datatable/js/pdfmake.min.js') }}"></script>
+    <script src="{{ asset('datatable/js/vfs_fonts.js') }}"></script>
+    <script src="{{ asset('js/dataTable.js') }}"></script>
 <script>
-$(document).ready(function() {
-    $(".userTest").DataTable({
-        "responsive": true,
-        "lengthChange": false,
-        "autoWidth": false,
-        "language": {
-            "sEmptyTable": "No hay datos disponibles en la tabla",
-            "sInfo": "Mostrando _START_ a _END_ de _TOTAL_ entradas",
-            "sInfoEmpty": "Mostrando 0 a 0 de 0 entradas",
-            "sInfoFiltered": "(filtrado de _MAX_ entradas totales)",
-            "sLengthMenu": "Mostrar _MENU_ entradas",
-            "sLoadingRecords": "Cargando...",
-            "sProcessing": "Procesando...",
-            "sSearch": "Buscar:",
-            "sZeroRecords": "No se encontraron resultados",
-            "oPaginate": {
-                "sFirst": "Primero",
-                "sLast": "Último",
-                "sNext": "Siguiente",
-                "sPrevious": "Anterior"
-            },
-            "oAria": {
-                "sSortAscending": ": Activar para ordenar la columna de manera ascendente",
-                "sSortDescending": ": Activar para ordenar la columna de manera descendente"
-            }
-        },
-        "buttons": [
-            { extend: "copy", text: "Copiar", className: "btn btn-primary" },
-            { extend: "csv", text: "CSV", className: "btn btn-primary" },
-            { extend: "excel", text: "Excel", className: "btn btn-primary" },
-            { extend: "pdf", text: "PDF", className: "btn btn-primary" },
-            { extend: "print", text: "Imprimir", className: "btn btn-primary" },
-            // { extend: "colvis", text: "Columnas", className: "btn btn-primary" }
-        ]
-    }).buttons().container().appendTo('.userTest_wrapper .col-md-6:eq(0)');
-});
+
 </script>
 <script>
     $(document).ready(function() {

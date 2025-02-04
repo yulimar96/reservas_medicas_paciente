@@ -10,8 +10,8 @@ return new class extends Migration
     {
         Schema::create('medical_specialities', function (Blueprint $table) {
             $table->id();
-            $table->string('name',50); // Campo para el nombre de la especialidad
-            $table->string('description',50);
+            $table->string('name',200); // Campo para el nombre de la especialidad
+            $table->string('description',200);
             $table->boolean('active')->default(true);
             $table->timestamps();
         });

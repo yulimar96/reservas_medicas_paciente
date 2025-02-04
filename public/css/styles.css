@@ -1,10 +1,16 @@
+.lexend-giga {
+    font-family: "Lexend Giga", serif !important;
+    font-weight: 700 !important; /* Cambia el peso según lo que necesites */
+    font-style: normal !important;
+    font-size: 30px !important;
+}
 .primary-md {
     background: linear-gradient(60deg, #ab47bc, #8e24aa) !important;
     color: azure !important;
 }
 
 .info-md {
-    background: linear-gradient(74deg, #1291b9, #31abbbfa) !important;
+    background: linear-gradient(74deg, rgb(18, 185, 171), #31abbbfa) !important;
     color: azure !important;
 }
 
@@ -18,11 +24,23 @@
 }
 
 .btn.c-info-md:hover {
-    color: #8ACCDE !important;
+    color: #8accde !important;
 }
 
 .btn-danger {
-    background: linear-gradient(103deg, #df3232e0, #123027) !important;
+    background: linear-gradient(
+        103deg,
+        rgba(219, 16, 16, 0.88),
+        rgb(242, 247, 245)
+    ) !important;
+    color: azure !important;
+}
+.btn-danger:hover {
+    background: linear-gradient(
+        103deg,
+        rgba(223, 26, 26, 0.88),
+        #123027
+    ) !important;
     color: azure !important;
 }
 
@@ -54,7 +72,7 @@
 }
 
 .nav a:hover {
-    color: #2aaabe !important;
+    color: #3333d7 !important;
     /* Color del texto al pasar el mouse */
     text-shadow: #000507 !important;
     /* Subrayado al pasar el mouse */
@@ -112,7 +130,7 @@
 }
 
 .modal-content {
-    box-shadow: 0 .2rem 0.2rem rgba(250, 246, 246, 0.986);
+    box-shadow: 0 0.2rem 0.2rem rgba(250, 246, 246, 0.986);
     /* border-radius: 1rem !important; */
     /* background: rgba(250, 246, 246, 0.986); */
 }
@@ -126,7 +144,6 @@
 .img-size-30 {
     width: 30px !important;
 }
-
 
 .form-control {
     border: 0px !important;
@@ -161,7 +178,7 @@
     margin: 0 !important;
 }
 
-.userTest_wrapper button {
+/* .userTest_wrapper button {
     background: linear-gradient(45deg, #00dcff, #959ba1) !important;
     color: white !important;
     border: none !important;
@@ -174,9 +191,101 @@
 .userTest_wrapper button:hover {
     background: linear-gradient(45deg, #829dbb, #bcc5cf) !important;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2) !important;
-}
+} */
 
 /* Estilo para el contenedor de botones */
 .dataTables_wrapper button {
     margin-bottom: 10px !important;
+}
+/* Centrar el cuadro de login */
+.login-box {
+    width: 400px; /* Ancho del cuadro de login */
+    margin: auto; /* Centrar horizontalmente */
+    margin-top: 100px; /* Espacio desde la parte superior */
+}
+
+/* Estilo del logo */
+.login-logo a {
+    font-size: 2rem; /* Tamaño de fuente del logo */
+    color: #007bff; /* Color del texto */
+}
+
+/* Estilo de los inputs */
+.input-group .form-control {
+    border: 1px solid #ced4da; /* Borde del input */
+    border-radius: 0.25rem; /* Bordes redondeados */
+    box-shadow: none; /* Sin sombra */
+}
+
+/* Estilo del botón */
+.btn-primary {
+    background-color: #007bff; /* Color de fondo */
+    border-color: #007bff; /* Color del borde */
+}
+
+/* Estilo del botón al pasar el mouse */
+.btn-primary:hover {
+    background-color: #0056b3; /* Color de fondo al pasar el mouse */
+    border-color: #0056b3; /* Color del borde al pasar el mouse */
+}
+
+/* Estilo de los mensajes de error */
+.login-box-msg {
+    color: #dc3545; /* Color rojo para mensajes de error */
+    font-weight: bold; /* Negrita */
+}
+.badge-admin {
+    background: linear-gradient(
+        90deg,
+        rgba(255, 0, 0, 1) 0%,
+        rgba(255, 128, 128, 1) 100%
+    ); /* Degradado rojo */
+
+    color: white;
+
+    padding: 5px 10px;
+
+    border-radius: 5px;
+}
+
+.badge-secretaria {
+    background: linear-gradient(
+        90deg,
+        rgba(173, 216, 230, 1) 0%,
+        rgba(135, 206, 250, 1) 100%
+    ); /* Degradado azul claro */
+
+    color: white;
+
+    padding: 5px 10px;
+
+    border-radius: 5px;
+}
+
+.badge-doctor {
+    background: linear-gradient(
+        90deg,
+        rgba(0, 0, 139, 1) 0%,
+        rgba(70, 130, 180, 1) 100%
+    ); /* Degradado azul oscuro */
+
+    color: white;
+
+    padding: 5px 10px;
+
+    border-radius: 5px;
+}
+
+.badge-patient {
+    background: linear-gradient(
+        90deg,
+        rgba(128, 0, 128, 1) 0%,
+        rgba(221, 160, 221, 1) 100%
+    ); /* Degradado morado */
+
+    color: white;
+
+    padding: 5px 10px;
+
+    border-radius: 5px;
 }
